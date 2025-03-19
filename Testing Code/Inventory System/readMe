@@ -1,1 +1,6 @@
-
+This code framework contains the following features:
+1. Allow users to pick up items and store them in the inventory system
+2. Allows programmers to initialize the items that can be interacted with players.
+3. Allows users to select the item they want from the different items.
+4. This is purely back-end code so it could be used with any asset easily
+5. The code could run with bug-free
