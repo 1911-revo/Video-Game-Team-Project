@@ -1,1 +1,2 @@
-This folder is used to store the testing code of the weapon system, contributed by Henry Cotton
+This code allows for a simple implementation of a weapon system. It allows a user to switch their currently equipped weapon from a specified roster of weapons that may be
+changed at a later date. The implementation simply uses the terminal as we have not settled on any temporary assets for the time being!
