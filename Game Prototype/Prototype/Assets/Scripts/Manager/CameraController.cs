@@ -25,7 +25,9 @@ public class CameraController : MonoBehaviour
     private Vector2 currentCursorOffset;
     private Vector2 targetCursorOffset;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    /// <summary>
+    /// Sets up the camera variables.
+    /// </summary>
     void Start()
     {
         // Pulls the main camera despite what the camera's name is. (So long as it has the MainCamera tag)
@@ -51,7 +53,9 @@ public class CameraController : MonoBehaviour
             }
         }
     }
-
+    /// <summary>
+    ///  Calculates where the camera should be after the player has moved.
+    /// </summary>
     private void LateUpdate()
     {
         if (playerTransform == null) return;
@@ -70,7 +74,9 @@ public class CameraController : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, targetPosition, followSpeed * Time.deltaTime);
     }
 
-    // Calculates where the camera should be looking between the player and the cursor.
+    /// <summary>
+    /// Calculates where the camera should be looking between the player and the cursor.
+    /// </summary>
     private void CalculateCursorOffset()
     {
         // Convert mouse position to world point (optimized for 2D)
