@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         playerControls = new PlayerControls();
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
     }
 
     /// <summary>
@@ -55,8 +56,14 @@ public class PlayerController : MonoBehaviour
     {
         movement = playerControls.Player.Move.ReadValue<Vector2>();
 
+        if (movement.magnitude > 0)
+        {
+            movement.Normalize();
+        }
+
         playerAnimator.SetFloat("moveX", movement.x);
         playerAnimator.SetFloat("moveY", movement.y);
+
     }
 
     /// <summary>
