@@ -8,6 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/MissionSelect.unity
+    guid: ae0b788138b45dd41a385881c339f64d
+  - enabled: 1
+    path: Assets/Scenes/FirstScene.unity
+    guid: 2517d328bb04cf64a934fe6dcd1ed80b
+  - enabled: 1
+    path: Assets/Scenes/Mission 1.unity
+    guid: 36ac8259fbbafc5488c55bde00bcd7a4
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
