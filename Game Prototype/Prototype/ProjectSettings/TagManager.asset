@@ -48,5 +48,11 @@ TagManager:
   - name: Weapons
     uniqueID: 3252107953
     locked: 0
+  - name: DialogueBox
+    uniqueID: 3829977461
+    locked: 0
+  - name: Text
+    uniqueID: 600104577
+    locked: 0
   m_RenderingLayers:
   - Default
