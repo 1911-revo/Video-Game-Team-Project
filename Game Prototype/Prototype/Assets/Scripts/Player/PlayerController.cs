@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Controls the player character's movement and animation.
@@ -10,10 +11,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody2D rb; 
     [SerializeField] private Animator playerAnimator; 
     [SerializeField] private SpriteRenderer playerSpriteRenderer;
+    [SerializeField] private GameObject inventoryUI; // Reference to the inventory UI
+    
 
     // Input system controls
     private PlayerControls playerControls; 
     private Vector2 movement; 
+    private InputAction openInventoryAction; // Action to open the inventory
 
     /// <summary>
     /// Initialize input controls.
@@ -22,6 +26,7 @@ public class PlayerController : MonoBehaviour
     {
         playerControls = new PlayerControls();
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        openInventoryAction = playerControls.Player.OpenInventory;
     }
 
     /// <summary>
@@ -30,6 +35,13 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         playerControls.Enable();
+        openInventoryAction.performed += OpenInventory; 
+    }
+
+    private void OnDisable()
+    {
+        openInventoryAction.performed -= OpenInventory; 
+        playerControls.Disable();
     }
 
     /// <summary>
@@ -91,4 +103,15 @@ public class PlayerController : MonoBehaviour
             playerSpriteRenderer.flipX = false;
         }
     }
+    /// <summary>
+    /// action to open (display) the inventory UI when the corresponding input is detected.
+    /// </summary>
+    private void OpenInventory(InputAction.CallbackContext context)
+    {
+        if (inventoryUI != null)
+        {
+            inventoryUI.SetActive(!inventoryUI.activeSelf);
+        }
+    }
+
 }
