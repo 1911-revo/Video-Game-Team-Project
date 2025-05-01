@@ -11,6 +11,9 @@ public class DetectInteractions : MonoBehaviour
     [Header("Prompt UI")]
     [SerializeField] private GameObject promptPrefab;
 
+    [SerializeField] private InventorySystem inventorySystem;
+
+
     private GameObject nearbyCollectable;
     private GameObject activePrompt;
 
@@ -25,8 +28,8 @@ public class DetectInteractions : MonoBehaviour
         // Handle input for collection
         if (nearbyCollectable != null && Input.GetKeyDown(KeyCode.E))
         {
-            //CollectItem(nearbyCollectable);
             Debug.Log("Interacted with: " + nearbyCollectable.name);
+            CollectItem(nearbyCollectable);
         }
     }
 
@@ -115,21 +118,37 @@ public class DetectInteractions : MonoBehaviour
     /// <summary>
     /// Deletes an item and currently prints it's in-unity name to the console.
     /// </summary>
-    /// <param name="item"></param>
     private void CollectItem(GameObject item)
     {
-        // Print the name of the collected object to the console
-        Debug.Log("Collected: " + item.name);
-
-        // Destroy the prompt
-        if (activePrompt != null)
+        if (item != null)
         {
-            Destroy(activePrompt);
-            activePrompt = null;
-        }
+            string itemName = item.name;
 
-        // Destroy the collected item
-        Destroy(item);
-        nearbyCollectable = null;
+            Debug.Log("Collected: " + itemName);
+
+            // Add item name to inventory
+            if (inventorySystem != null)
+            {
+                inventorySystem.AddItem(itemName);
+            }
+            else
+            {
+                Debug.LogWarning("Inventory system reference is missing!");
+            }
+
+            // Destroy prompt and object
+            if (activePrompt != null)
+            {
+                Destroy(activePrompt);
+                activePrompt = null;
+            }
+
+            Destroy(item);
+            nearbyCollectable = null;
+        }
+        else
+        {
+            Debug.LogWarning("Tried to collect null item!");
+        }
     }
 }
