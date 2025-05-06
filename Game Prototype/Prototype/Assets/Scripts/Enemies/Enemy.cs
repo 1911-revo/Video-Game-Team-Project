@@ -4,7 +4,6 @@ public class Enemy : MonoBehaviour
 {
     public EnemyStatsSO stats;
     public Transform player;
-    public BoxCollider2D playerBC;
 
     [Header("States")]
     public EnemyStateController controller;
@@ -12,6 +11,11 @@ public class Enemy : MonoBehaviour
     public EnemyState chaseState;
     public EnemyState attackState;
     //public EnemyState dieState;
+
+    private void Start()
+    {
+        player = GameObject.FindWithTag("Player").transform;
+    }
 
     public void TakeDamage(float damage)
     {

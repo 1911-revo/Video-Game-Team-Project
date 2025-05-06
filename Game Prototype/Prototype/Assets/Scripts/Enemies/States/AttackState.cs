@@ -21,12 +21,6 @@ public class AttackState : EnemyState
 
         float distToPlayer = Vector2.Distance(enemy.transform.position, enemy.player.position);
 
-        if (distToPlayer > 1.1)
-        {
-            Vector2 dir = (enemy.player.position - enemy.transform.position).normalized;
-            enemy.transform.position += (Vector3)(dir * enemy.stats.moveSpeed * Time.deltaTime);
-        }
-
         if (distToPlayer > enemy.stats.attackRange)
         {
             enemy.controller.TransitionTo(enemy.chaseState);
