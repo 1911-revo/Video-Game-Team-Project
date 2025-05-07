@@ -1393,10 +1393,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: -0.07775769
-    y: -0.07717042
-    width: 1.1573237
-    height: 1.1575563
+    x: 0.08868895
+    y: 0.086956516
+    width: 0.8226221
+    height: 0.8237986
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -12243,10 +12243,6 @@ PrefabInstance:
     - target: {fileID: 2586685246937129310, guid: ee283db982060604493fb36dbe31b2b7, type: 3}
       propertyPath: m_Name
       value: TestEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 4859302636390679294, guid: ee283db982060604493fb36dbe31b2b7, type: 3}
-      propertyPath: m_BodyType
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8241432758549775654, guid: ee283db982060604493fb36dbe31b2b7, type: 3}
       propertyPath: m_LocalPosition.x
