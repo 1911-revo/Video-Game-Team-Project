@@ -11916,7 +11916,6 @@ GameObject:
   - component: {fileID: 613362144}
   - component: {fileID: 613362143}
   - component: {fileID: 613362142}
-  - component: {fileID: 613362146}
   m_Layer: 5
   m_Name: TextBox
   m_TagString: Untagged
@@ -12051,26 +12050,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &613362146
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 613362140}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cac4f95ef4880d4e801368a8331c445, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  textComponent: {fileID: 639071339}
-  typingSpeed: 0.05
-  shakeAmount: 0.5
-  dialogueBox: {fileID: 0}
-  dialogueLines: []
-  currentLineIndex: 0
-  isTyping: 0
-  dialogueStarted: 0
 --- !u!1 &639071337
 GameObject:
   m_ObjectHideFlags: 0
