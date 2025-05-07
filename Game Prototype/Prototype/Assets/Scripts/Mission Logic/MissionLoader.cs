@@ -7,6 +7,7 @@ public class MissionLoader : MonoBehaviour
 {
     [SerializeField] private GameObject buttonPrefab;
     [SerializeField] private Transform scrollViewContent;
+    [SerializeField] private MissionData missionData;
 
     // Defines a way to add missions to our list
     [Serializable]
@@ -14,6 +15,8 @@ public class MissionLoader : MonoBehaviour
     {
         public string sceneName;
         public string missionText;
+        public string missionLore;
+        public Sprite missionSprite;
     }
 
     // Array of mission info (scene + display text)
@@ -42,14 +45,20 @@ public class MissionLoader : MonoBehaviour
                 buttonText.text = mission.missionText;
 
             // Add onClick event to load the scene
-            button.onClick.AddListener(() => LoadScene(mission.sceneName));
+            button.onClick.AddListener(() => LoadScene(mission.sceneName, mission.missionText, mission.missionLore, mission.missionSprite));
         }
     }
 
     //Loads the requested scene
-    public void LoadScene(string sceneName)
+    public void LoadScene(string sceneName, string missionText, string missionLore, Sprite missionSprite)
     {
-        Debug.Log("Loading scene: " + sceneName);
-        SceneManager.LoadScene(sceneName);
+        Debug.Log("Loading mission lore screen");
+        SceneManager.LoadScene("missionLore");
+
+        // Passes important info to the mission
+        missionData.sceneName = sceneName;
+        missionData.missionText = missionText;
+        missionData.sprite = missionSprite;
+        missionData.lore = missionLore;
     }
 }
