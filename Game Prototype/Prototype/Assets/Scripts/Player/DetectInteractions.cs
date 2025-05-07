@@ -1,104 +1,156 @@
 using TMPro;
 using UnityEngine;
-using static UnityEditor.Progress;
+using System.Collections.Generic;
 
 public class DetectInteractions : MonoBehaviour
 {
     [Header("Detection Settings")]
     [SerializeField] private float detectionRadius = 2f;
     [SerializeField] private LayerMask collectableLayer;
+    [SerializeField] private LayerMask npcLayer;
 
     [Header("Prompt UI")]
     [SerializeField] private GameObject promptPrefab;
 
     [SerializeField] private InventorySystem inventorySystem;
-
+    [SerializeField] private Dialogue dialogueManager;
 
     private GameObject nearbyCollectable;
+    private GameObject nearbyNPC;
     private GameObject activePrompt;
 
-    /// <summary>
-    /// Check for interactions with collectables/interactables
-    /// </summary>
+    // Track NPCs that have been talked to
+    private HashSet<string> interactedNPCs = new HashSet<string>();
+
+    // Track which object is currently prioritized for interaction
+    private enum InteractionType { None, Collectable, NPC }
+    private InteractionType currentInteraction = InteractionType.None;
+
     void Update()
     {
-        // Check for nearby collectables
+        // Check for nearby interactables
         CheckForInteractions();
 
-        // Handle input for collection
-        if (nearbyCollectable != null && Input.GetKeyDown(KeyCode.E))
+        // Handle input for interactions
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("Interacted with: " + nearbyCollectable.name);
-            CollectItem(nearbyCollectable);
+            // Determine which interaction to prioritize
+            switch (currentInteraction)
+            {
+                case InteractionType.Collectable:
+                    if (nearbyCollectable != null)
+                    {
+                        CollectItem(nearbyCollectable);
+                    }
+                    break;
+
+                case InteractionType.NPC:
+                    if (nearbyNPC != null)
+                    {
+                        TalkToNPC(nearbyNPC);
+                    }
+                    break;
+            }
         }
     }
 
-    /// <summary>
-    /// Find all collectable objects within the detection radius
-    /// </summary>
     private void CheckForInteractions()
     {
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius, collectableLayer);
+        // Find all collectables and NPCs within the detection radius
+        Collider2D[] collectableColliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius, collectableLayer);
+        Collider2D[] npcColliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius, npcLayer);
 
-        // If no collectables were found and we have an active prompt, destroy it
-        if (hitColliders.Length == 0)
+        // If no interactables were found, clean up and return
+        if (collectableColliders.Length == 0 && npcColliders.Length == 0)
         {
-            if (activePrompt != null)
-            {
-                Destroy(activePrompt);
-                activePrompt = null;
-            }
-            nearbyCollectable = null;
+            CleanupPrompt();
             return;
         }
 
         // Find the closest interactable object
-        float closestDistance = float.MaxValue;
+        float closestCollectableDistance = float.MaxValue;
         GameObject closestCollectable = null;
 
-        foreach (Collider2D collider in hitColliders)
+        float closestNPCDistance = float.MaxValue;
+        GameObject closestNPC = null;
+
+        // Find closest collectable
+        foreach (Collider2D collider in collectableColliders)
         {
             if (collider.CompareTag("Collectable"))
             {
                 float distance = Vector2.Distance(transform.position, collider.transform.position);
-                if (distance < closestDistance)
+                if (distance < closestCollectableDistance)
                 {
-                    closestDistance = distance;
+                    closestCollectableDistance = distance;
                     closestCollectable = collider.gameObject;
                 }
             }
         }
-        // If found a new collectable that's different from the previous one
-        if (closestCollectable != null && closestCollectable != nearbyCollectable)
-        {
-            // Destroy any existing prompt
-            if (activePrompt != null)
-            {
-                Destroy(activePrompt);
-            }
 
-            // Create a new prompt above the collectable
-            nearbyCollectable = closestCollectable;
-            CreatePromptAboveObject(nearbyCollectable);
-        }
-        else if (closestCollectable == null && activePrompt != null)
+        // Find closest NPC
+        foreach (Collider2D collider in npcColliders)
         {
-            // No collectable found, destroy the prompt
-            Destroy(activePrompt);
-            activePrompt = null;
-            nearbyCollectable = null;
+            if (collider.CompareTag("NPC"))
+            {
+                float distance = Vector2.Distance(transform.position, collider.transform.position);
+                if (distance < closestNPCDistance)
+                {
+                    closestNPCDistance = distance;
+                    closestNPC = collider.gameObject;
+                }
+            }
+        }
+
+        // Determine which is closer: the closest collectable or the closest NPC
+        if (closestNPC != null && (closestCollectable == null || closestNPCDistance <= closestCollectableDistance))
+        {
+            // NPC is closer (or there is no collectable), prioritize NPC interaction
+            if (nearbyNPC != closestNPC || currentInteraction != InteractionType.NPC)
+            {
+                CleanupPrompt();
+                nearbyNPC = closestNPC;
+                nearbyCollectable = null;
+                currentInteraction = InteractionType.NPC;
+                CreatePromptAboveObject(nearbyNPC);
+            }
+        }
+        else if (closestCollectable != null)
+        {
+            // Collectable is closer (or there is no NPC), prioritize collectable interaction
+            if (nearbyCollectable != closestCollectable || currentInteraction != InteractionType.Collectable)
+            {
+                CleanupPrompt();
+                nearbyCollectable = closestCollectable;
+                nearbyNPC = null;
+                currentInteraction = InteractionType.Collectable;
+                CreatePromptAboveObject(nearbyCollectable);
+            }
+        }
+        else
+        {
+            // No interactables found, clean up
+            CleanupPrompt();
         }
     }
 
-    /// <summary>
-    /// Creates text above the object thats interactable.
-    /// </summary>
-    /// <param name="obj"> The object to create text above </param>
+    private void CleanupPrompt()
+    {
+        if (activePrompt != null)
+        {
+            Destroy(activePrompt);
+            activePrompt = null;
+        }
+        nearbyCollectable = null;
+        nearbyNPC = null;
+        currentInteraction = InteractionType.None;
+    }
+
     private void CreatePromptAboveObject(GameObject obj)
     {
         if (promptPrefab != null)
         {
-            // Instantiate the prompt as a child of the collectable object
+            // Instantiate the prompt as a child of the interactable object
             activePrompt = Instantiate(promptPrefab, obj.transform);
             activePrompt.transform.localPosition = new Vector3(0, 1, 0);
 
@@ -115,15 +167,11 @@ public class DetectInteractions : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Deletes an item and currently prints it's in-unity name to the console.
-    /// </summary>
     private void CollectItem(GameObject item)
     {
         if (item != null)
         {
             string itemName = item.name;
-
             Debug.Log("Collected: " + itemName);
 
             // Add item name to inventory
@@ -136,19 +184,58 @@ public class DetectInteractions : MonoBehaviour
                 Debug.LogWarning("Inventory system reference is missing!");
             }
 
-            // Destroy prompt and object
-            if (activePrompt != null)
-            {
-                Destroy(activePrompt);
-                activePrompt = null;
-            }
-
+            CleanupPrompt();
             Destroy(item);
-            nearbyCollectable = null;
         }
         else
         {
             Debug.LogWarning("Tried to collect null item!");
+        }
+    }
+
+    private void TalkToNPC(GameObject npc)
+    {
+        if (npc != null && dialogueManager != null)
+        {
+            string npcID = npc.name; // Using the NPC's name as a unique identifier
+            NPCDialogue npcDialogue = npc.GetComponent<NPCDialogue>();
+
+            if (npcDialogue != null)
+            {
+                // Determine if we should use regular or repeat dialogue
+                string[] dialogueToUse;
+
+                if (interactedNPCs.Contains(npcID) && npcDialogue.repeat.Count > 0)
+                {
+                    // Convert List<string> to string[]
+                    dialogueToUse = npcDialogue.repeat.ToArray();
+                    Debug.Log("Using repeat dialogue for: " + npcID);
+                }
+                else
+                {
+                    // First-time dialogue
+                    dialogueToUse = npcDialogue.dialogue.ToArray();
+                    interactedNPCs.Add(npcID); // Mark as interacted
+                    Debug.Log("Using first-time dialogue for: " + npcID);
+                }
+
+                // Start dialogue
+                dialogueManager.StartDialogue(dialogueToUse);
+
+                // Hide the prompt while in dialogue
+                if (activePrompt != null)
+                {
+                    activePrompt.SetActive(false);
+                }
+            }
+            else
+            {
+                Debug.LogWarning("NPC " + npcID + " does not have an NPCDialogue component!");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Either NPC is null or dialogue manager reference is missing!");
         }
     }
 }

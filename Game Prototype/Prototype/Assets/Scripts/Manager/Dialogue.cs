@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using TMPro;
+using UnityEditor.UI;
 using UnityEngine;
 
 public class Dialogue : MonoBehaviour
@@ -10,11 +11,12 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private TextMeshProUGUI textComponent;
     [SerializeField] private float typingSpeed = 0.05f;
     [SerializeField] private float shakeAmount = 0.5f;
-    
-    private string[] dialogueLines;
-    private int currentLineIndex;
-    private bool isTyping;
-    private bool dialogueStarted;
+    [SerializeField] private GameObject dialogueBox;
+
+    public string[] dialogueLines;
+    public int currentLineIndex;
+    public bool isTyping;
+    public bool dialogueStarted;
     private Coroutine typingCoroutine;
     private Coroutine shakeCoroutine;
     
@@ -37,8 +39,9 @@ public class Dialogue : MonoBehaviour
             Debug.LogError("TextMeshProUGUI component not found on the text GameObject!");
         }
         textComponent.text = string.Empty;
-        ///TEMP
-        StartDialogue(testDialogue);
+
+        // Hide the dialogue by default
+        SetDialogueVisibility(false);
     }
     
     void Update()
@@ -59,7 +62,20 @@ public class Dialogue : MonoBehaviour
             }
         }
     }
-    
+
+    //Hide / unhide gameobject
+    void SetDialogueVisibility(bool visible)
+    {
+        if (dialogueBox != null)
+        {
+            dialogueBox.SetActive(visible);
+        }
+        else
+        {
+            Debug.LogWarning("Dialogue box reference is missing! Cannot change visibility.");
+        }
+    }
+
     // Start dialogue with given text lines
     public void StartDialogue(string[] lines)
     {
@@ -72,6 +88,7 @@ public class Dialogue : MonoBehaviour
         shakeIndices.Clear();
         
         DisplayNextLine();
+        SetDialogueVisibility(true);
     }
     
     // Show next line in the sequence
@@ -350,6 +367,7 @@ public class Dialogue : MonoBehaviour
         dialogueStarted = false;
         textComponent.text = string.Empty;
         shakeIndices.Clear();
+        SetDialogueVisibility(false);
     }
     
     // Type out text with a delay between characters
