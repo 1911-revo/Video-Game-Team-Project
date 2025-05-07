@@ -42,8 +42,6 @@ public class Dialogue : MonoBehaviour
 
         // Hide the dialogue by default
         SetDialogueVisibility(false);
-
-        StartDialogue(testDialogue);
     }
     
     void Update()
@@ -66,9 +64,16 @@ public class Dialogue : MonoBehaviour
     }
 
     //Hide / unhide gameobject
-    void SetDialogueVisibility(bool visable)
+    void SetDialogueVisibility(bool visible)
     {
-        dialogueBox.SetActive(visable);
+        if (dialogueBox != null)
+        {
+            dialogueBox.SetActive(visible);
+        }
+        else
+        {
+            Debug.LogWarning("Dialogue box reference is missing! Cannot change visibility.");
+        }
     }
 
     // Start dialogue with given text lines
