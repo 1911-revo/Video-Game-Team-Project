@@ -321,8 +321,8 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.037545126
-    y: 0.03846154
+    x: 0.8606498
+    y: 0.31025642
     width: 0.9241878
     height: 0.9230769
   near clip plane: 0.3
@@ -1367,7 +1367,7 @@ MonoBehaviour:
   missionData: {fileID: 11400000, guid: db503eea18023d24a863c78d2a494114, type: 2}
   missions:
   - sceneName: Mission 1
-    missionText: The Begining
+    missionText: The Start
     missionLore: This is the lore for the mission.\nI hope that actually added linebreaks
       lmao
     missionSprite: {fileID: 21300000, guid: 239d6bac7153783488e18c578c47ecee, type: 3}
