@@ -31,12 +31,30 @@ public class WeaponController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 gunDirection = mousePos - transform.position;
+        float gunAngle = Mathf.Atan2(gunDirection.y, gunDirection.x) * Mathf.Rad2Deg;
 
-        
+        // Rotate the prefab to face the mouse
+        transform.rotation = Quaternion.Euler(0f, 0f, gunAngle);
+
+        // Flip the sprite if looking left
+        weaponSpriteRenderer.flipY = gunAngle > 90f || gunAngle < -90f;
+
+        //Shooting
         if (Input.GetMouseButtonDown(0)){
-            GameObject bullet = Instantiate(projectilePrefab, transform.position + Bulletoffset,projectilePrefab.transform.rotation);
-            bulletMovement bulletScript = bullet.GetComponent<bulletMovement>();
-            bulletScript.setFacing(facing);
+
+            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 direction = (mouseWorld - transform.position).normalized;
+
+            GameObject bullet = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+            bullet.GetComponent<Rigidbody2D>().linearVelocity = direction * 20.0f;
+
+            // Set rotation to match direction
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            bullet.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+
+
         }
 
         transform.position = player.transform.position + offset;
@@ -55,27 +73,5 @@ public class WeaponController : MonoBehaviour
         }
         
     }
-    private void FixedUpdate()
-    {
-        SetFacingDirection();
-    }
-
-    private void SetFacingDirection()
-    {
-        Vector3 cursorPos = Input.mousePosition;
-        Vector3 playerScreenPoint = Camera.main.WorldToScreenPoint(player.transform.position);
-
-        if (cursorPos.x < playerScreenPoint.x)
-        {
-            facing = false;
-            weaponSpriteRenderer.flipX = true;
-            offset = new Vector3((float)-0.7, 0,0);
-        } 
-        else
-        {
-            facing = true;
-            weaponSpriteRenderer.flipX = false;
-            offset = new Vector3((float)0.7, 0,0);
-        }
-    }
+   
 }
