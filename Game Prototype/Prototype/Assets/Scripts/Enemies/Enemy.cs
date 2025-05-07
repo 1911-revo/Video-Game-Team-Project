@@ -1,3 +1,6 @@
+using System;
+using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -5,16 +8,21 @@ public class Enemy : MonoBehaviour
     public EnemyStatsSO stats;
     public Transform player;
 
-    [Header("States")]
     public EnemyStateController controller;
-    public EnemyState patrolState;
-    public EnemyState chaseState;
-    public EnemyState attackState;
-    //public EnemyState dieState;
 
     private void Start()
     {
+        controller = GetComponent<EnemyStateController>();
+        if (controller == null )
+        {
+            Debug.Log("EnemyStateController not found on enemy!");
+        }
+
         player = GameObject.FindWithTag("Player").transform;
+        if (player == null )
+        {
+            Debug.Log("Player transform not found in scene!");
+        }
     }
 
     public void TakeDamage(float damage)

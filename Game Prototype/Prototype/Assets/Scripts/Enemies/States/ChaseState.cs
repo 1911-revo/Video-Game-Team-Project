@@ -17,12 +17,12 @@ public class ChaseState : EnemyState
 
         if (distToPlayer < enemy.stats.attackRange)
         {
-            enemy.controller.TransitionTo(enemy.attackState);
+            enemy.controller.TransitionTo("TestEnemyAttackState");
         }
 
         if (distToPlayer > enemy.stats.chaseRange)
         {
-            enemy.controller.TransitionTo(enemy.patrolState);
+            enemy.controller.TransitionTo("TestEnemyPatrolState");
         }
     }
 

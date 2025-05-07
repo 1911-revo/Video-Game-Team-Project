@@ -36,7 +36,7 @@ public class PatrolState : EnemyState
         float distToPlayer = Vector2.Distance(enemy.transform.position, enemy.player.position);
         if (distToPlayer <= enemy.stats.chaseRange)
         {
-            enemy.controller.TransitionTo(enemy.chaseState);
+            enemy.controller.TransitionTo("TestEnemyChaseState");
         }
     }
 

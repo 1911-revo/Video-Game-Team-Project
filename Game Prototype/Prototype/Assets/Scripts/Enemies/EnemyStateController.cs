@@ -1,12 +1,16 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyStateController : MonoBehaviour
 {
-    public EnemyState initialState;
+    [Header("Configuration")]
+    [SerializeReference] public ScriptableObject attackSO;
+    [SerializeField] private EnemyState[] states;
+    public WaypointManager waypointManager;
+
+    private Dictionary<string, EnemyState> enemyStates;
     private EnemyState currentState;
     private Enemy enemy;
-
-    [SerializeReference] public ScriptableObject attackSO;
 
     public IAttackBehaviour attack { get; private set; }
 
@@ -14,11 +18,22 @@ public class EnemyStateController : MonoBehaviour
     {
         enemy = GetComponent<Enemy>();
         attack = attackSO as IAttackBehaviour;
+        enemyStates = new Dictionary<string, EnemyState>();
+        foreach (var state in states)
+        {
+            if (state != null)
+            {
+                enemyStates.Add(state.name, state);
+            }
+        }
     }
 
     private void Start()
     {
-        TransitionTo(initialState);
+        if (states.Length > 0)
+        {
+            TransitionTo(states[0].name);
+        }
     }
 
     private void Update()
@@ -26,10 +41,17 @@ public class EnemyStateController : MonoBehaviour
         currentState?.Tick(enemy);
     }
 
-    public void TransitionTo(EnemyState newState)
+    public void TransitionTo(string stateName)
     {
-        currentState?.Exit(enemy);
-        currentState = newState;
-        currentState?.Enter(enemy);
+        if (enemyStates.TryGetValue(stateName, out var newState))
+        {
+            currentState?.Exit(enemy);
+            currentState = newState;
+            currentState?.Enter(enemy);
+        }
+        else
+        {
+            Debug.Log($"State '{stateName}' not found.");
+        }
     }
 }
