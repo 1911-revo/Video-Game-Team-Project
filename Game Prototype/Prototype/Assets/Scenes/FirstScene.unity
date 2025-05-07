@@ -1172,7 +1172,7 @@ MonoBehaviour:
   rb: {fileID: 228698740}
   playerAnimator: {fileID: 228698743}
   playerSpriteRenderer: {fileID: 228698741}
-  inventoryUI: {fileID: 123352755}
+  inventoryUI: {fileID: 1586054054}
 --- !u!50 &228698740
 Rigidbody2D:
   serializedVersion: 5
