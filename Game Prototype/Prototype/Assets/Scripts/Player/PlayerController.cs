@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
+
 
 /// <summary>
 /// Controls the player character's movement and animation.
@@ -18,6 +20,9 @@ public class PlayerController : MonoBehaviour
     private PlayerControls playerControls; 
     private Vector2 movement; 
     private InputAction openInventoryAction; // Action to open the inventory
+    private Animator inventoryAnimator; // Animator to control inventory animation
+    private bool inventoryIsOpen = false;
+
 
     /// <summary>
     /// Initialize input controls.
@@ -25,9 +30,20 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         playerControls = new PlayerControls();
-        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
         openInventoryAction = playerControls.Player.OpenInventory;
+
+        if (inventoryUI != null)
+        {
+            inventoryAnimator = inventoryUI.GetComponent<Animator>();
+        }
+        else
+        {
+            Debug.LogError("inventoryUI is null! Please assign it in Inspector.");
+        }
+
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
     }
+
 
     /// <summary>
     /// Enable input controls when the object is enabled.
@@ -40,9 +56,17 @@ public class PlayerController : MonoBehaviour
 
     private void OnDisable()
     {
-        openInventoryAction.performed -= OpenInventory; 
-        playerControls.Disable();
+        if (openInventoryAction != null)
+        {
+            openInventoryAction.performed -= OpenInventory;
+        }
+
+        if (playerControls != null)
+        {
+            playerControls.Disable();
+        }
     }
+
 
     /// <summary>
     /// Called every frame to get input from the player.
@@ -106,12 +130,26 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// action to open (display) the inventory UI when the corresponding input is detected.
     /// </summary>
+
+
+
     private void OpenInventory(InputAction.CallbackContext context)
     {
-        if (inventoryUI != null)
+        if (inventoryAnimator == null) return;
+
+        inventoryIsOpen = !inventoryIsOpen;
+
+        if (inventoryIsOpen)
         {
-            inventoryUI.SetActive(!inventoryUI.activeSelf);
+            inventoryAnimator.SetTrigger("TriggerOpen");
+            Debug.Log("Triggered Open");
+        }
+        else
+        {
+            inventoryAnimator.SetTrigger("TriggerClose");
+            Debug.Log("Triggered Close");
         }
     }
+
 
 }
