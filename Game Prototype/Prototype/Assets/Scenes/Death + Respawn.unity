@@ -1308,8 +1308,12 @@ MonoBehaviour:
   collectableLayer:
     serializedVersion: 2
     m_Bits: 4294967295
+  npcLayer:
+    serializedVersion: 2
+    m_Bits: 0
   promptPrefab: {fileID: 2115296093}
   inventorySystem: {fileID: 123352760}
+  dialogueManager: {fileID: 0}
 --- !u!61 &228698745
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1588,10 +1592,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.16535434
+    y: 1.4702703
+    width: 0.71991
+    height: 0.77837837
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -12905,6 +12909,7 @@ MonoBehaviour:
   Bulletoffset: {x: 0, y: 0.109, z: 0}
   facing: 0
   projectilePrefab: {fileID: 629720207950647196, guid: e1234ff0cd65e4d82ae174269b790db8, type: 3}
+  weaponInventory: {fileID: 11400000, guid: 145791a0d079c404aa15ea63da34a4f4, type: 2}
 --- !u!212 &1702335017
 SpriteRenderer:
   m_ObjectHideFlags: 0

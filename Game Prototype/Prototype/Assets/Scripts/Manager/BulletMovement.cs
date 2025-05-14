@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
 
 public class bulletMovement : MonoBehaviour
 {
 
-    private float speed = 4.0f;
+    //private float speed = 4.0f;
+
 
 
     //public bool facing;
@@ -13,6 +15,19 @@ public class bulletMovement : MonoBehaviour
     // public void setFacing(bool f){
     //     facing = f;
     // }
+
+    // This function is called when the bullet collides with another collider
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Destroy(gameObject); // Destroy the bullet
+        Debug.Log("Collision with: " + collision.gameObject.name);
+        // Check if the bullet collided with the crate
+        if (collision.gameObject.CompareTag("Crate")) // Ensure your crate has a "Crate" tag
+        {
+            Destroy(collision.gameObject); // Destroy the crate
+            
+        }
+    }
 
     void Start()
     {

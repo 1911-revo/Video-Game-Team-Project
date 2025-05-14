@@ -1517,10 +1517,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.16535434
+    y: 1.4702703
+    width: 0.71991
+    height: 0.77837837
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -12423,6 +12423,7 @@ MonoBehaviour:
   Bulletoffset: {x: 0, y: 0.109, z: 0}
   facing: 0
   projectilePrefab: {fileID: 629720207950647196, guid: e1234ff0cd65e4d82ae174269b790db8, type: 3}
+  weaponDatabase: {fileID: 11400000, guid: d211437f560ea4a85bc74faa0c3c9cd3, type: 2}
 --- !u!212 &1702335017
 SpriteRenderer:
   m_ObjectHideFlags: 0

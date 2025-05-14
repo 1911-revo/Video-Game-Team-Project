@@ -7,6 +7,8 @@ public class Weapons
 
     public int damage { get; set; }
 
+   
+
     
 
     public Weapons (string Name, int Damage){
@@ -14,6 +16,7 @@ public class Weapons
         name = Name;
 
         damage = Damage;
+
 
     }
 
