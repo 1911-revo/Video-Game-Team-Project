@@ -7,6 +7,7 @@ public class InventorySystem : MonoBehaviour
 {
     public item item;
     public List<item> collectedItems = new List<item>();
+    public List<item> beginingItems = new List<item>();
     public List<GameObject> keyItemObjects = new List<GameObject>();
 
     [Header("UI References")]
@@ -31,6 +32,11 @@ public class InventorySystem : MonoBehaviour
                 textComponent.text = collectable.thisItem.name;
             }
         }
+
+        foreach (item items in beginingItems) // Add the begining items to the inventory on mission load.
+        {
+            AddItem(items);
+        }
     }
 
 
@@ -49,7 +55,7 @@ public class InventorySystem : MonoBehaviour
             var textComponent = textEntry.GetComponentInChildren<TextMeshProUGUI>();
             if (textComponent != null)
             {
-                textComponent.text = name;
+                textComponent.text = collectedItem.name;
             }
             else
             {
@@ -78,6 +84,7 @@ public class InventorySystem : MonoBehaviour
                 return listedItems[i - 1];
             }
         }
+        Debug.Log("Could not find the item: " + item.name + "in the listed inventory");
         return null;
     }
 }

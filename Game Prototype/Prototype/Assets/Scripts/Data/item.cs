@@ -3,6 +3,7 @@ using UnityEngine;
 /// <summary>
 /// A basic struct that stores item data.
 /// </summary>
+[System.Serializable]
 public struct item
 {
     public string id;

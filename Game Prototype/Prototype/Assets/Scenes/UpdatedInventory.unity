@@ -313,6 +313,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccdf41c19e7a03b449412770ca2954f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item:
+    id: 
+    name: 
+    isKeyItem: 0
+    isConsumed: 0
+  collectedItems: []
+  beginingItems:
+  - id: test
+    name: Test
+    isKeyItem: 0
+    isConsumed: 0
   keyItemObjects:
   - {fileID: 1830843830}
   inventoryPanel: {fileID: 750599272}
@@ -12618,6 +12629,11 @@ MonoBehaviour:
   itemName: Green Key
   isKeyItem: 1
   isConsumed: 0
+  thisItem:
+    id: 
+    name: 
+    isKeyItem: 0
+    isConsumed: 0
 --- !u!4 &1952805454 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6075975974975622417, guid: a92434f05fc24a2408687e0356655548, type: 3}
