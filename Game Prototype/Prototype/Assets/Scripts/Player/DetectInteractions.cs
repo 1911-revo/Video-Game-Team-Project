@@ -171,13 +171,14 @@ public class DetectInteractions : MonoBehaviour
     {
         if (item != null)
         {
-            string itemName = item.name;
-            Debug.Log("Collected: " + itemName);
+            collectable collectableScript = item.GetComponent<collectable>();
+            item collectedItem = collectableScript.thisItem;
+            Debug.Log("Collected: " + collectedItem);
 
             // Add item name to inventory
             if (inventorySystem != null)
             {
-                inventorySystem.AddItem(itemName);
+                inventorySystem.AddItem(collectedItem);
             }
             else
             {
