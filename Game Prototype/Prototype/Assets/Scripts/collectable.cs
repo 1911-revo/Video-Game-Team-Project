@@ -9,6 +9,9 @@ public class collectable : MonoBehaviour
 
     public item thisItem;
 
+    /// <summary>
+    /// Creates an item attached to a gameobject that can be referenced later.
+    /// </summary>
     private void Start()
     {
         thisItem = new item(id, itemName, isKeyItem, isConsumed);

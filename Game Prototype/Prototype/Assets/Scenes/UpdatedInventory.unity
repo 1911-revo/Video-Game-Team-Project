@@ -313,7 +313,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccdf41c19e7a03b449412770ca2954f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collectedItems: []
+  keyItemObjects:
+  - {fileID: 1830843830}
   inventoryPanel: {fileID: 750599272}
   inventoryTextPrefab: {fileID: 7596974460302595094, guid: d2efc07317a825c4981fe125a221e3da, type: 3}
 --- !u!1 &134139863
@@ -1517,10 +1518,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.04148784
+    y: 0.04071247
+    width: 0.91559374
+    height: 0.9160305
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -12477,6 +12478,7 @@ GameObject:
   - component: {fileID: 1830843832}
   - component: {fileID: 1830843831}
   - component: {fileID: 1830843833}
+  - component: {fileID: 1830843834}
   m_Layer: 0
   m_Name: Green Key
   m_TagString: Collectable
@@ -12600,6 +12602,22 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.28, y: 0.12}
   m_EdgeRadius: 0
+--- !u!114 &1830843834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1830843830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 582824e6da0197040a65ddba898bb08a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: g_key
+  itemName: Green Key
+  isKeyItem: 1
+  isConsumed: 0
 --- !u!4 &1952805454 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6075975974975622417, guid: a92434f05fc24a2408687e0356655548, type: 3}

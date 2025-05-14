@@ -13,6 +13,10 @@ public class InventorySystem : MonoBehaviour
     public Transform inventoryPanel;           // 背包 UI 的父容器（例如一个 Vertical Layout Group）
     public GameObject inventoryTextPrefab;     // 包含 TextMeshProUGUI 的预制体（一个文字条）
 
+    /// <summary>
+    /// All key items should be added to this list from the unity editor.
+    /// Adds a grey dummy item to the inventory without adding it to the list of collected items.
+    /// </summary>
     private void Start()
     {
         foreach (GameObject keyItemObj in keyItemObjects)
@@ -59,6 +63,11 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Finds a TextMeshPro item based on the display name.
+    /// </summary>
+    /// <param name="item">The item to find thats being displayed.</param>
+    /// <returns></returns>
     private TextMeshProUGUI findItem(item item)
     {
         TextMeshProUGUI[] listedItems = GetComponentsInChildren<TextMeshProUGUI>();
