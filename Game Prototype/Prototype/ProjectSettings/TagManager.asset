@@ -48,6 +48,9 @@ TagManager:
   - name: Weapons
     uniqueID: 3252107953
     locked: 0
+  - name: Bullet
+    uniqueID: 3579455945
+    locked: 0
   - name: DialogueBox
     uniqueID: 3829977461
     locked: 0
