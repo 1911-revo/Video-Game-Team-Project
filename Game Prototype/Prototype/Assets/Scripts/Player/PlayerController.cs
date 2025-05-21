@@ -9,19 +9,22 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     // References and settings for movement and animation
-    [SerializeField] private float moveSpeed; 
-    [SerializeField] private Rigidbody2D rb; 
-    [SerializeField] private Animator playerAnimator; 
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private Animator playerAnimator;
     [SerializeField] private SpriteRenderer playerSpriteRenderer;
     [SerializeField] private GameObject inventoryUI; // Reference to the inventory UI
-    
+
 
     // Input system controls
-    private PlayerControls playerControls; 
-    private Vector2 movement; 
+    private PlayerControls playerControls;
+    private Vector2 movement;
     private InputAction openInventoryAction; // Action to open the inventory
     private Animator inventoryAnimator; // Animator to control inventory animation
     private bool inventoryIsOpen = false;
+
+    // Added variable to control movement
+    private bool canMove = true;
 
 
     /// <summary>
@@ -51,7 +54,7 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         playerControls.Enable();
-        openInventoryAction.performed += OpenInventory; 
+        openInventoryAction.performed += OpenInventory;
     }
 
     private void OnDisable()
@@ -90,16 +93,24 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void PlayerInput()
     {
-        movement = playerControls.Player.Move.ReadValue<Vector2>();
-
-        if (movement.magnitude > 0)
+        // Only read movement input if player can move
+        if (canMove)
         {
-            movement.Normalize();
+            movement = playerControls.Player.Move.ReadValue<Vector2>();
+
+            if (movement.magnitude > 0)
+            {
+                movement.Normalize();
+            }
+        }
+        else
+        {
+            // Zero out movement when player can't move
+            movement = Vector2.zero;
         }
 
         playerAnimator.SetFloat("moveX", movement.x);
         playerAnimator.SetFloat("moveY", movement.y);
-
     }
 
     /// <summary>
@@ -107,7 +118,11 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Move()
     {
-        rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime));
+        // Only apply movement if player can move
+        if (canMove)
+        {
+            rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime));
+        }
     }
 
     /// <summary>
@@ -115,27 +130,27 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void SetFacingDirection()
     {
+        // Even when movement is disabled, we still want the player to face the cursor
         Vector3 cursorPos = Input.mousePosition;
         Vector3 playerScreenPoint = Camera.main.WorldToScreenPoint(transform.position);
 
         if (cursorPos.x < playerScreenPoint.x)
         {
             playerSpriteRenderer.flipX = true;
-        } 
+        }
         else
         {
             playerSpriteRenderer.flipX = false;
         }
     }
+
     /// <summary>
-    /// action to open (display) the inventory UI when the corresponding input is detected.
+    /// Action to open (display) the inventory UI when the corresponding input is detected.
     /// </summary>
-
-
-
     private void OpenInventory(InputAction.CallbackContext context)
     {
-        if (inventoryAnimator == null) return;
+        // Only allow opening inventory if player can move (not in dialogue)
+        if (inventoryAnimator == null || !canMove) return;
 
         inventoryIsOpen = !inventoryIsOpen;
 
@@ -151,5 +166,26 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Enables or disables player movement.
+    /// </summary>
+    /// <param name="enabled">Whether movement should be enabled or disabled.</param>
+    public void SetMovementEnabled(bool enabled)
+    {
+        canMove = enabled;
 
+        // If disabling movement, also reset current movement to prevent sliding
+        if (!enabled)
+        {
+            movement = Vector2.zero;
+            playerAnimator.SetFloat("moveX", 0);
+            playerAnimator.SetFloat("moveY", 0);
+
+            // Optional: Stop the rigidbody velocity as well
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+            }
+        }
+    }
 }

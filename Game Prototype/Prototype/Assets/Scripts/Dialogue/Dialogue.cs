@@ -12,6 +12,16 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private float shakeAmount = 0.5f;
     [SerializeField] private GameObject dialogueBox;
 
+    // New fields for audio playback
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private List<AudioClip> audioClips = new List<AudioClip>();
+    [SerializeField] private List<string> audioClipNames = new List<string>();
+    private Dictionary<string, AudioClip> soundDictionary = new Dictionary<string, AudioClip>();
+
+    // New fields for command callbacks
+    public delegate void CommandCallback(string parameter);
+    private Dictionary<string, CommandCallback> commandCallbacks = new Dictionary<string, CommandCallback>();
+
     public string[] dialogueLines;
     public int currentLineIndex;
     public bool isTyping;
@@ -37,6 +47,15 @@ public class Dialogue : MonoBehaviour
 
         // Hide the dialogue by default
         SetDialogueVisibility(false);
+
+        // Initialize sound dictionary
+        for (int i = 0; i < Mathf.Min(audioClips.Count, audioClipNames.Count); i++)
+        {
+            if (audioClips[i] != null && !string.IsNullOrEmpty(audioClipNames[i]))
+            {
+                soundDictionary[audioClipNames[i]] = audioClips[i];
+            }
+        }
     }
 
     void Update()
@@ -56,6 +75,31 @@ public class Dialogue : MonoBehaviour
                 currentLineIndex++;
                 DisplayNextLine();
             }
+        }
+    }
+
+    // Register a command callback
+    public void RegisterCommand(string commandName, CommandCallback callback)
+    {
+        commandCallbacks[commandName] = callback;
+    }
+
+    // Play a sound by name
+    public void PlaySound(string soundName)
+    {
+        if (audioSource == null)
+        {
+            Debug.LogWarning("AudioSource not assigned to Dialogue component!");
+            return;
+        }
+
+        if (soundDictionary.ContainsKey(soundName))
+        {
+            audioSource.PlayOneShot(soundDictionary[soundName]);
+        }
+        else
+        {
+            Debug.LogWarning($"Sound not found: {soundName}");
         }
     }
 
@@ -229,6 +273,36 @@ public class Dialogue : MonoBehaviour
             string colorCode = match.Groups[1].Value;
             string text = match.Groups[2].Value;
             return $"<color=#{colorCode}>{text}</color>";
+        });
+
+        // Process INVOKE command - *INVOKE(command:parameter)
+        string invokePattern = @"\*INVOKE\(([^)]*)\)";
+        processedText = Regex.Replace(processedText, invokePattern, match => {
+            string commandParameter = match.Groups[1].Value;
+            // Try to extract command name and parameters
+            string[] parts = commandParameter.Split(new char[] { ':' }, 2);
+            string commandName = parts[0].Trim();
+            string parameter = parts.Length > 1 ? parts[1].Trim() : "";
+
+            // Execute the command if registered
+            if (commandCallbacks.ContainsKey(commandName))
+            {
+                commandCallbacks[commandName](parameter);
+            }
+            else
+            {
+                Debug.LogWarning($"Command not found: {commandName}");
+            }
+
+            return ""; // Remove the command from displayed text
+        });
+
+        // Process PLAY command - *PLAY(soundName)
+        string playPattern = @"\*PLAY\(([^)]*)\)";
+        processedText = Regex.Replace(processedText, playPattern, match => {
+            string soundName = match.Groups[1].Value.Trim();
+            PlaySound(soundName);
+            return ""; // Remove the command from displayed text
         });
 
         // Handle text shaking formatting

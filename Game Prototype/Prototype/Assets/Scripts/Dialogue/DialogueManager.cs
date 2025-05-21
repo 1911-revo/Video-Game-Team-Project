@@ -11,6 +11,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Dialogue dialogueController;
     [SerializeField] private GameObject choicePanel;
     [SerializeField] private GameObject choiceButtonPrefab;
+    [SerializeField] private PlayerController playerController; // Add reference to PlayerController
 
     [Header("Optional")]
     [SerializeField] private float delayAfterTyping = 0.2f;
@@ -35,6 +36,16 @@ public class DialogueManager : MonoBehaviour
         if (choiceButtonPrefab == null)
         {
             Debug.LogError("Choice button prefab reference is missing! Please assign it in the inspector.");
+        }
+
+        // Find player controller if not assigned
+        if (playerController == null)
+        {
+            playerController = FindObjectOfType<PlayerController>();
+            if (playerController == null)
+            {
+                Debug.LogWarning("PlayerController not found! Player movement will not be restricted during dialogue.");
+            }
         }
 
         // Hide choice panel at start
@@ -82,6 +93,9 @@ public class DialogueManager : MonoBehaviour
             Debug.LogError("DialogueTree is null for NPC: " + npc.name);
             return;
         }
+
+        // Disable player movement when dialogue starts
+        DisablePlayerMovement();
 
         currentTree = tree;
         currentNode = currentTree.GetStartNode();
@@ -231,7 +245,7 @@ public class DialogueManager : MonoBehaviour
             }
         }
 
-        // Position the choice panel properly for a horizontal layout - Ideally I shouldn't be hardcoding this but I give up :sob:
+        // Position the choice panel properly for a horizontal layout - Ideally I shouldn't be hardcoding this but I give up :sob:  
         RectTransform choicePanelRect = choicePanel.GetComponent<RectTransform>();
         if (choicePanelRect != null)
         {
@@ -293,8 +307,28 @@ public class DialogueManager : MonoBehaviour
         {
             choicePanel.SetActive(false);
         }
+
+        // Re-enable player movement when dialogue ends
+        EnablePlayerMovement();
     }
 
+    // Disable player movement during dialogue
+    private void DisablePlayerMovement()
+    {
+        if (playerController != null)
+        {
+            playerController.SetMovementEnabled(false);
+        }
+    }
+
+    // Enable player movement after dialogue
+    private void EnablePlayerMovement()
+    {
+        if (playerController != null)
+        {
+            playerController.SetMovementEnabled(true);
+        }
+    }
 
     // Beating the choice buttons into submission
     private void EnsureChoicePanelHasLayout()

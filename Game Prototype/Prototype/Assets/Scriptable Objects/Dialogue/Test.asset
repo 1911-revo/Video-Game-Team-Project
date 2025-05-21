@@ -30,7 +30,7 @@ MonoBehaviour:
     choices: []
     nextNodeID: 
   - nodeID: start
-    text: Hello I am an NPC!
+    text: Hello I am an NPC! *PLAY(Start)
     choices: []
     nextNodeID: test_1
   startNodeID: start
