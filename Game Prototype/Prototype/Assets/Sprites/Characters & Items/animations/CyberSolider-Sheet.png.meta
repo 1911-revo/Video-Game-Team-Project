@@ -309,7 +309,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      CyberSolider-Sheet_0: 3792413151722569049
+      CyberSolider-Sheet_1: 2285597110727242754
+      CyberSolider-Sheet_2: 2931981346165542172
+      CyberSolider-Sheet_3: -3915750309724562933
+      CyberSolider-Sheet_4: 1021370379606967460
+      CyberSolider-Sheet_5: -5430393067290470693
+      CyberSolider-Sheet_6: -7283824537734015055
+      CyberSolider-Sheet_7: -8582172305836372326
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

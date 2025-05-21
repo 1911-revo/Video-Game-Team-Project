@@ -309,7 +309,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Guardbot_EAC-Sheet_0: 3853637574701437020
+      Guardbot_EAC-Sheet_1: 3278765883514363584
+      Guardbot_EAC-Sheet_2: -7216750200874275778
+      Guardbot_EAC-Sheet_3: -6327744200578908738
+      Guardbot_EAC-Sheet_4: 2764260355981975239
+      Guardbot_EAC-Sheet_5: 1282954060706795896
+      Guardbot_EAC-Sheet_6: 644659622390036760
+      Guardbot_EAC-Sheet_7: -9041801632957549622
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

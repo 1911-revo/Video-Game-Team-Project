@@ -309,7 +309,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      J_move_spreadSheet_0: 7186134673419951463
+      J_move_spreadSheet_1: -1453385313914178550
+      J_move_spreadSheet_2: -6937299032195095277
+      J_move_spreadSheet_3: -1293348780807755301
+      J_move_spreadSheet_4: -5365767209351523421
+      J_move_spreadSheet_5: 7645536297454088319
+      J_move_spreadSheet_6: 2255944856113154338
+      J_move_spreadSheet_7: -4911305597959133577
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
