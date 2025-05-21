@@ -321,10 +321,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.050561797
+    y: 0.049937576
+    width: 0.8988764
+    height: 0.89887637
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -1366,15 +1366,8 @@ MonoBehaviour:
   scrollViewContent: {fileID: 156162296}
   missionData: {fileID: 11400000, guid: db503eea18023d24a863c78d2a494114, type: 2}
   missions:
-  - sceneName: Mission 1
-    missionText: The Start
-    missionLore: This is the lore for the mission.\nI hope that actually added linebreaks
-      lmao
-    missionSprite: {fileID: 21300000, guid: 239d6bac7153783488e18c578c47ecee, type: 3}
-  - sceneName: FirstScene
-    missionText: Mission 2
-    missionLore: Welcome to mission 2
-    missionSprite: {fileID: 0}
+  - {fileID: 11400000, guid: c9d1d678d50260d42bbc9185d42b3be0, type: 2}
+  - {fileID: 11400000, guid: c9d1d678d50260d42bbc9185d42b3be0, type: 2}
 --- !u!4 &1985102695
 Transform:
   m_ObjectHideFlags: 0

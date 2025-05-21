@@ -12,8 +12,10 @@ public class DetectInteractions : MonoBehaviour
     [Header("Prompt UI")]
     [SerializeField] private GameObject promptPrefab;
 
+    [Header("Systems")]
     [SerializeField] private InventorySystem inventorySystem;
-    [SerializeField] private Dialogue dialogueManager;
+    [SerializeField] private Dialogue dialogueController;
+    [SerializeField] private DialogueManager dialogueManager;
 
     private GameObject nearbyCollectable;
     private GameObject nearbyNPC;
@@ -26,8 +28,26 @@ public class DetectInteractions : MonoBehaviour
     private enum InteractionType { None, Collectable, NPC }
     private InteractionType currentInteraction = InteractionType.None;
 
+    // Track if we're currently in a dialogue
+    private bool inDialogue = false;
+
+    void Start()
+    {
+        // Check for required components
+        if (dialogueManager == null)
+        {
+            Debug.LogWarning("DialogueManager reference is missing! Branching dialogue will not work.");
+        }
+    }
+
     void Update()
     {
+        // Don't check for interactions while in dialogue
+        if (inDialogue)
+        {
+            return;
+        }
+
         // Check for nearby interactables
         CheckForInteractions();
 
@@ -196,47 +216,66 @@ public class DetectInteractions : MonoBehaviour
 
     private void TalkToNPC(GameObject npc)
     {
-        if (npc != null && dialogueManager != null)
+        if (npc == null) return;
+
+        string npcID = npc.name;
+        NPCDialogue npcDialogue = npc.GetComponent<NPCDialogue>();
+
+        if (npcDialogue == null)
         {
-            string npcID = npc.name; // Using the NPC's name as a unique identifier
-            NPCDialogue npcDialogue = npc.GetComponent<NPCDialogue>();
+            Debug.LogWarning("NPC " + npcID + " does not have an NPCDialogue component!");
+            return;
+        }
 
-            if (npcDialogue != null)
-            {
-                // Determine if we should use regular or repeat dialogue
-                string[] dialogueToUse;
+        // Hide the prompt while in dialogue
+        if (activePrompt != null)
+        {
+            activePrompt.SetActive(false);
+        }
 
-                if (interactedNPCs.Contains(npcID) && npcDialogue.repeat.Count > 0)
-                {
-                    // Convert List<string> to string[]
-                    dialogueToUse = npcDialogue.repeat.ToArray();
-                    Debug.Log("Using repeat dialogue for: " + npcID);
-                }
-                else
-                {
-                    // First-time dialogue
-                    dialogueToUse = npcDialogue.dialogue.ToArray();
-                    interactedNPCs.Add(npcID); // Mark as interacted
-                    Debug.Log("Using first-time dialogue for: " + npcID);
-                }
+        inDialogue = true;
 
-                // Start dialogue
-                dialogueManager.StartDialogue(dialogueToUse);
+        // Check if this NPC uses the new branching dialogue system
+        if (dialogueManager != null && npcDialogue.UsesBranchingDialogue())
+        {
+            // Use new branching dialogue system
+            dialogueManager.StartDialogue(npcDialogue);
 
-                // Hide the prompt while in dialogue
-                if (activePrompt != null)
-                {
-                    activePrompt.SetActive(false);
-                }
-            }
-            else
-            {
-                Debug.LogWarning("NPC " + npcID + " does not have an NPCDialogue component!");
-            }
+            // Register for dialogue completion
+            dialogueController.SetDialogueCallback(OnDialogueComplete);
         }
         else
         {
-            Debug.LogWarning("Either NPC is null or dialogue manager reference is missing!");
+            // Use the original linear dialogue system
+            string[] dialogueToUse;
+
+            if (interactedNPCs.Contains(npcID) && npcDialogue.repeat.Count > 0)
+            {
+                dialogueToUse = npcDialogue.repeat.ToArray();
+                Debug.Log("Using repeat dialogue for: " + npcID);
+            }
+            else
+            {
+                dialogueToUse = npcDialogue.dialogue.ToArray();
+                interactedNPCs.Add(npcID);
+                Debug.Log("Using first-time dialogue for: " + npcID);
+            }
+
+            // Start dialogue with callback
+            dialogueController.StartDialogue(dialogueToUse);
+            dialogueController.SetDialogueCallback(OnDialogueComplete);
+        }
+    }
+
+    private void OnDialogueComplete()
+    {
+        // Re-enable interaction detection
+        inDialogue = false;
+
+        // Show prompt again if still near the NPC
+        if (nearbyNPC != null && activePrompt != null)
+        {
+            activePrompt.SetActive(true);
         }
     }
 }
