@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Karl_sprite-Sheet_prison_negative_0: -1394304809769935151
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

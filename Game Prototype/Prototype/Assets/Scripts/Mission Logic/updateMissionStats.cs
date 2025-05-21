@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class missionStats : MonoBehaviour
+public class updateMissionStats : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI timestamp;
     [SerializeField] public SavedMissionStats stats;

@@ -309,7 +309,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Guard_move_spreadSheet_0: -7995715236002236555
+      Guard_move_spreadSheet_1: 5369637186320062403
+      Guard_move_spreadSheet_2: 7728320911109577740
+      Guard_move_spreadSheet_3: -5340517480073934325
+      Guard_move_spreadSheet_4: 2448664258756068398
+      Guard_move_spreadSheet_5: -682152560749054922
+      Guard_move_spreadSheet_6: -6516790350781101605
+      Guard_move_spreadSheet_7: 7859213738752321032
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
