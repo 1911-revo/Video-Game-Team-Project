@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// General state machine to control enemy behaviour
+/// </summary>
 public class EnemyStateController : MonoBehaviour
 {
     [Header("Configuration")]
@@ -16,6 +19,7 @@ public class EnemyStateController : MonoBehaviour
 
     private void Awake()
     {
+        // Initialise controller
         enemy = GetComponent<Enemy>();
         attack = attackSO as IAttackBehaviour;
         enemyStates = new Dictionary<string, EnemyState>();
@@ -30,6 +34,7 @@ public class EnemyStateController : MonoBehaviour
 
     private void Start()
     {
+        // Use first state provided as initial state
         if (states.Length > 0)
         {
             TransitionTo(states[0].name);
@@ -41,10 +46,16 @@ public class EnemyStateController : MonoBehaviour
         currentState?.Tick(enemy);
     }
 
+    /// <summary>
+    /// Attempt to transition to the provided state
+    /// </summary>
+    /// <param name="stateName"> New state </param>
     public void TransitionTo(string stateName)
     {
+        // Check state exists
         if (enemyStates.TryGetValue(stateName, out var newState))
         {
+            // Make transition
             currentState?.Exit(enemy);
             currentState = newState;
             currentState?.Enter(enemy);

@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Scriptable object to store the stats of an enemy
+/// </summary>
 [CreateAssetMenu(menuName = "Enemies/Enemy Stats")]
 public class EnemyStatsSO : ScriptableObject
 {

@@ -4,15 +4,16 @@ using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+///  General enemy class to hold enemy information
+/// </summary>
 public class Enemy : MonoBehaviour
 {
     public EnemyStatsSO stats;
-    [HideInInspector]
-    public Transform player;
+    [HideInInspector] public Transform player;
 
     public EnemyStateController controller;
-    [HideInInspector]
-    public NavMeshAgent agent;
+    [HideInInspector] public NavMeshAgent agent;
     public FieldOfView fov;
 
 
@@ -40,15 +41,5 @@ public class Enemy : MonoBehaviour
         agent.speed = stats.moveSpeed;
         fov.fov = stats.fov;
         fov.viewDistance = stats.viewDistance;
-    }
-
-    public void TakeDamage(float damage)
-    {
-        stats.health -= damage;
-        if (stats.health <= 0) 
-        {
-            Destroy(gameObject);
-            //controller.TransitionTo(dieState);
-        }
     }
 }

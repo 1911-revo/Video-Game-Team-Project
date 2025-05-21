@@ -12975,7 +12975,7 @@ MonoBehaviour:
   environmentLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  playerLayerMask:
+  targetLayerMask:
     serializedVersion: 2
     m_Bits: 8
   percentRaysOnPlayer: 0
