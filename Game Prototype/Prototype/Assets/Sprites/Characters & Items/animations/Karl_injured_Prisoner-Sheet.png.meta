@@ -309,7 +309,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Karl_injured_Prisoner-Sheet_0: 2422314393959329114
+      Karl_injured_Prisoner-Sheet_1: 96864692019073401
+      Karl_injured_Prisoner-Sheet_2: -319839549377824634
+      Karl_injured_Prisoner-Sheet_3: 2799649617455167021
+      Karl_injured_Prisoner-Sheet_4: -4606011656847059520
+      Karl_injured_Prisoner-Sheet_5: 5901301158705932000
+      Karl_injured_Prisoner-Sheet_6: -3141190561608689746
+      Karl_injured_Prisoner-Sheet_7: -4693609766738380348
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

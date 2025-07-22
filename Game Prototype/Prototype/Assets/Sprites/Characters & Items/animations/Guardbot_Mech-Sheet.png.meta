@@ -309,7 +309,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Guardbot_Mech-Sheet_0: 555376172444543908
+      Guardbot_Mech-Sheet_1: 6571929915218105569
+      Guardbot_Mech-Sheet_2: 493394396566120308
+      Guardbot_Mech-Sheet_3: -5303825693468927777
+      Guardbot_Mech-Sheet_4: -7785341862675119204
+      Guardbot_Mech-Sheet_5: 5185097643032964496
+      Guardbot_Mech-Sheet_6: 5384362587773219928
+      Guardbot_Mech-Sheet_7: 8335500142815155078
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

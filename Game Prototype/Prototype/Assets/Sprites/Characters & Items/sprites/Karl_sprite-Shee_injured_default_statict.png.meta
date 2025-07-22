@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Karl_sprite-Shee_injured_default_statict_0: -1927683523256692571
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

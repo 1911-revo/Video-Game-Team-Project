@@ -309,7 +309,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      UG_holdItem-Sheet_0: 1568791129483475728
+      UG_holdItem-Sheet_1: 4788900098447443782
+      UG_holdItem-Sheet_2: -7943809906764324186
+      UG_holdItem-Sheet_3: 4259889586624420254
+      UG_holdItem-Sheet_4: -8731184082429975293
+      UG_holdItem-Sheet_5: 2628326661504214460
+      UG_holdItem-Sheet_6: -2249547318301652742
+      UG_holdItem-Sheet_7: -3931477777562614232
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

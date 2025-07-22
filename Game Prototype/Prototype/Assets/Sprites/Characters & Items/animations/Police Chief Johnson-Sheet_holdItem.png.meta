@@ -309,7 +309,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Police Chief Johnson-Sheet_holdItem_0: -5784846447057739893
+      Police Chief Johnson-Sheet_holdItem_1: -5731486667677004966
+      Police Chief Johnson-Sheet_holdItem_2: 8377402398588292504
+      Police Chief Johnson-Sheet_holdItem_3: -4460427866526568465
+      Police Chief Johnson-Sheet_holdItem_4: 1486791108843048221
+      Police Chief Johnson-Sheet_holdItem_5: -1215017193572001457
+      Police Chief Johnson-Sheet_holdItem_6: -422457368400092990
+      Police Chief Johnson-Sheet_holdItem_7: -4925567937616741708
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

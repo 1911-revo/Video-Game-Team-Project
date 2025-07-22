@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      EnvEle_Table_Jeson_Bloodstain_0: -676706839931392079
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -97,9 +97,7 @@ public class WeaponController : MonoBehaviour
 
         }
 
-
-
-        transform.position = player.transform.position + offset;
+        transform.position = player.transform.position;
         
         if (Input.GetKeyDown(KeyCode.Alpha1)){  
                 //Once we have weapon assets switch the sprite being used here.

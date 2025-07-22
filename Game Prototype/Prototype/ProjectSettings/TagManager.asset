@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Collectable
+  - Crate
   layers:
   - Default
   - TransparentFX
@@ -12,8 +13,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - AboveUI
+  - Player
   - 
   - 
   - 

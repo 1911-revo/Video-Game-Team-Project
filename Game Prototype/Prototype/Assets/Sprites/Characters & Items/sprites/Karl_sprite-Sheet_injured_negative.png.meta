@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Karl_sprite-Sheet_injured_negative_0: 6361172429901096354
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

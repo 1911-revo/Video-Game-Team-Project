@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      EnvEle_CrashedCar_Stack_0: -1164870244452957029
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

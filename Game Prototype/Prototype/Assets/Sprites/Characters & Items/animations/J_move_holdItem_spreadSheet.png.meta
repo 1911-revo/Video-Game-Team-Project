@@ -309,7 +309,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      J_move_holdItem_spreadSheet_0: -4756507974756653052
+      J_move_holdItem_spreadSheet_1: -4590905404721179697
+      J_move_holdItem_spreadSheet_2: 8512826748987312959
+      J_move_holdItem_spreadSheet_3: -8486804137534574767
+      J_move_holdItem_spreadSheet_4: 938642754748911797
+      J_move_holdItem_spreadSheet_5: 110150545861640843
+      J_move_holdItem_spreadSheet_6: -950163823153169050
+      J_move_holdItem_spreadSheet_7: 422311261355042320
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
