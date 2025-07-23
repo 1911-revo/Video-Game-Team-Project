@@ -11,7 +11,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Dialogue dialogueController;
     [SerializeField] private GameObject choicePanel;
     [SerializeField] private GameObject choiceButtonPrefab;
-    [SerializeField] private PlayerController playerController;
+    [SerializeField] private PlayerController playerController; // Add reference to PlayerController
 
     [Header("Optional")]
     [SerializeField] private float delayAfterTyping = 0.2f;
@@ -19,6 +19,7 @@ public class DialogueManager : MonoBehaviour
     private DialogueTree currentTree;
     private DialogueNode currentNode;
     private bool dialogueActive = false;
+    private NPCDialogue currentNPC; // Store reference to current NPC
 
     void Start()
     {
@@ -38,7 +39,7 @@ public class DialogueManager : MonoBehaviour
             Debug.LogError("Choice button prefab reference is missing! Please assign it in the inspector.");
         }
 
-        // Find player controller if not assigned (this should always be assigned lmao)
+        // Find player controller if not assigned
         if (playerController == null)
         {
             playerController = FindObjectOfType<PlayerController>();
@@ -76,6 +77,7 @@ public class DialogueManager : MonoBehaviour
         dialogueActive = false;
         currentTree = null;
         currentNode = null;
+        currentNPC = null;
     }
 
     // Start a new dialogue with an NPC
@@ -87,6 +89,22 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        currentNPC = npc;
+
+        // Check if this NPC uses branching dialogue
+        if (npc.UsesBranchingDialogue())
+        {
+            StartBranchingDialogue(npc);
+        }
+        else
+        {
+            StartLinearDialogue(npc);
+        }
+    }
+
+    // Start branching dialogue with dialogue tree
+    private void StartBranchingDialogue(NPCDialogue npc)
+    {
         DialogueTree tree = npc.GetDialogueTree();
         if (tree == null)
         {
@@ -98,7 +116,10 @@ public class DialogueManager : MonoBehaviour
         DisablePlayerMovement();
 
         currentTree = tree;
-        currentNode = currentTree.GetStartNode();
+
+        // Get the appropriate start node based on whether we've spoken before
+        bool hasSpokenBefore = npc.HasSpokenBefore();
+        currentNode = currentTree.GetStartNode(hasSpokenBefore);
 
         if (currentNode == null)
         {
@@ -109,8 +130,57 @@ public class DialogueManager : MonoBehaviour
         dialogueActive = true;
         ShowCurrentNode();
 
-        // The boy has spoken
+        // Mark that we've spoken to this NPC
         npc.SetSpokenBefore();
+    }
+
+    // Start linear dialogue (old system with dialogue/repeat lists)
+    private void StartLinearDialogue(NPCDialogue npc)
+    {
+        string[] dialogueToUse;
+
+        if (npc.HasSpokenBefore() && npc.repeat != null && npc.repeat.Count > 0)
+        {
+            // Use repeat dialogue
+            dialogueToUse = npc.GetRepeatDialogue();
+        }
+        else if (npc.dialogue != null && npc.dialogue.Count > 0)
+        {
+            // Use first-time dialogue
+            dialogueToUse = npc.dialogue.ToArray();
+        }
+        else
+        {
+            Debug.LogError("No dialogue found for NPC: " + npc.name);
+            return;
+        }
+
+        // Disable player movement when dialogue starts
+        DisablePlayerMovement();
+
+        dialogueActive = true;
+
+        // Start the dialogue without sounds (old system doesn't have DialogueTree sounds)
+        dialogueController.StartDialogue(dialogueToUse);
+
+        // Mark that we've spoken to this NPC
+        npc.SetSpokenBefore();
+
+        // Set up coroutine to wait for dialogue completion
+        StartCoroutine(WaitForLinearDialogueCompletion());
+    }
+
+    // Wait for linear dialogue to complete
+    private IEnumerator WaitForLinearDialogueCompletion()
+    {
+        // Wait until dialogue is complete
+        while (dialogueController.dialogueStarted)
+        {
+            yield return null;
+        }
+
+        // End dialogue
+        EndDialogue();
     }
 
     // Display the current dialogue node
@@ -308,6 +378,7 @@ public class DialogueManager : MonoBehaviour
         dialogueActive = false;
         currentTree = null;
         currentNode = null;
+        currentNPC = null;
 
         // Hide choice panel if visible
         if (choicePanel != null)
