@@ -23,7 +23,7 @@ public class AttackState : EnemyState
 
         if (distToPlayer > enemy.stats.attackRange)
         {
-            enemy.controller.TransitionTo(enemy.chaseState);
+            enemy.controller.TransitionTo("TestEnemyChaseState");
         }
     }
 
