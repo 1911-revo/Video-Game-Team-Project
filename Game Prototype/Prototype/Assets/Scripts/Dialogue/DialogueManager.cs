@@ -11,7 +11,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Dialogue dialogueController;
     [SerializeField] private GameObject choicePanel;
     [SerializeField] private GameObject choiceButtonPrefab;
-    [SerializeField] private PlayerController playerController; // Add reference to PlayerController
+    [SerializeField] private PlayerController playerController;
 
     [Header("Optional")]
     [SerializeField] private float delayAfterTyping = 0.2f;
@@ -38,7 +38,7 @@ public class DialogueManager : MonoBehaviour
             Debug.LogError("Choice button prefab reference is missing! Please assign it in the inspector.");
         }
 
-        // Find player controller if not assigned
+        // Find player controller if not assigned (this should always be assigned lmao)
         if (playerController == null)
         {
             playerController = FindObjectOfType<PlayerController>();
@@ -122,8 +122,15 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        // Display the node text
-        dialogueController.StartDialogue(new string[] { currentNode.text });
+        // Get the sound dictionary from the current tree
+        Dictionary<string, AudioClip> sounds = null;
+        if (currentTree != null)
+        {
+            sounds = currentTree.GetAudioDictionary();
+        }
+
+        // Display the node text with sounds from the dialogue tree
+        dialogueController.StartDialogue(new string[] { currentNode.text }, sounds);
 
         // When dialogue finishes typing, show the choices or wait for input
         StartCoroutine(WaitForDialogueAndShowChoices());

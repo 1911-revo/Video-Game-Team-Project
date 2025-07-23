@@ -12,13 +12,13 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private float shakeAmount = 0.5f;
     [SerializeField] private GameObject dialogueBox;
 
-    // New fields for audio playback
+    // Audio playback - only AudioSource needed now
     [SerializeField] private AudioSource audioSource;
-    [SerializeField] private List<AudioClip> audioClips = new List<AudioClip>();
-    [SerializeField] private List<string> audioClipNames = new List<string>();
+
+    // Dictionary for current dialogue's sounds
     private Dictionary<string, AudioClip> soundDictionary = new Dictionary<string, AudioClip>();
 
-    // New fields for command callbacks
+    // Command callbacks
     public delegate void CommandCallback(string parameter);
     private Dictionary<string, CommandCallback> commandCallbacks = new Dictionary<string, CommandCallback>();
 
@@ -32,7 +32,7 @@ public class Dialogue : MonoBehaviour
     // Store indices of characters that should shake
     private List<int> shakeIndices = new List<int>();
 
-    // New fields for branching dialogue
+    // Branching dialogue fields
     public delegate void DialogueCallback();
     private DialogueCallback onDialogueLineComplete;
     private bool waitingForChoice = false;
@@ -47,15 +47,6 @@ public class Dialogue : MonoBehaviour
 
         // Hide the dialogue by default
         SetDialogueVisibility(false);
-
-        // Initialize sound dictionary
-        for (int i = 0; i < Mathf.Min(audioClips.Count, audioClipNames.Count); i++)
-        {
-            if (audioClips[i] != null && !string.IsNullOrEmpty(audioClipNames[i]))
-            {
-                soundDictionary[audioClipNames[i]] = audioClips[i];
-            }
-        }
     }
 
     void Update()
@@ -76,6 +67,12 @@ public class Dialogue : MonoBehaviour
                 DisplayNextLine();
             }
         }
+    }
+
+    // New method to set the sound dictionary for current dialogue
+    public void SetSoundDictionary(Dictionary<string, AudioClip> sounds)
+    {
+        soundDictionary = sounds ?? new Dictionary<string, AudioClip>();
     }
 
     // Register a command callback
@@ -128,10 +125,15 @@ public class Dialogue : MonoBehaviour
         waitingForChoice = waiting;
     }
 
-    // Start dialogue with given text lines
-    public void StartDialogue(string[] lines)
+    // Start dialogue with given text lines and optional sound dictionary
+    public void StartDialogue(string[] lines, Dictionary<string, AudioClip> sounds = null)
     {
         StopAllCoroutines();
+
+        if (sounds != null)
+        {
+            SetSoundDictionary(sounds);
+        }
 
         dialogueLines = lines;
         currentLineIndex = 0;
@@ -144,10 +146,21 @@ public class Dialogue : MonoBehaviour
         SetDialogueVisibility(true);
     }
 
-    // Start dialogue with a single line and optional callback
-    public void StartDialogue(string line, DialogueCallback callback = null)
+    // Start dialogue with given text lines (original method for backwards compatibility)
+    public void StartDialogue(string[] lines)
+    {
+        StartDialogue(lines, null);
+    }
+
+    // Start dialogue with a single line and optional callback and sounds
+    public void StartDialogue(string line, DialogueCallback callback = null, Dictionary<string, AudioClip> sounds = null)
     {
         StopAllCoroutines();
+
+        if (sounds != null)
+        {
+            SetSoundDictionary(sounds);
+        }
 
         dialogueLines = new string[] { line };
         currentLineIndex = 0;
@@ -159,6 +172,12 @@ public class Dialogue : MonoBehaviour
 
         DisplayNextLine();
         SetDialogueVisibility(true);
+    }
+
+    // Start dialogue with a single line and optional callback (original method for backwards compatibility)
+    public void StartDialogue(string line, DialogueCallback callback = null)
+    {
+        StartDialogue(line, callback, null);
     }
 
     // Show a single dialogue node (for branching dialogue)
