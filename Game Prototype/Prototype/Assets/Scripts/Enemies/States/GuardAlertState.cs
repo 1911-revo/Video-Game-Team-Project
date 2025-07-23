@@ -1,4 +1,6 @@
 using NUnit.Framework;
+using System.Runtime.CompilerServices;
+using Unity.Hierarchy;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -23,7 +25,30 @@ public class GuardAlertState : EnemyState
     /// <param name="enemy"> Enemy instance </param>
     public override void Tick(Enemy enemy)
     {
-        Debug.Log("Alerted");
+        // Enemy has reached its waypoint and needs new path
+        if (!enemy.agent.pathPending && enemy.agent.remainingDistance <= enemy.agent.stoppingDistance)
+        {
+            enemy.controller.waypointManager.GetNextWaypoint();
+            enemy.agent.SetDestination(enemy.controller.waypointManager.CurrentWaypoint().position);
+        }
+        // Update the field of view cone
+        Vector3 toPlayer = (enemy.player.position - enemy.transform.position).normalized;
+        enemy.fov.SetViewDirection(toPlayer, 120);
+        enemy.fov.RotateViewCone();
+        enemy.fov.SetOrigin(enemy.agent.nextPosition);
+
+
+        // Transition to patrol state if player exits field of view
+        if (enemy.fov.percentRaysOnPlayer == 0)
+        {
+            enemy.controller.TransitionTo("GuardPatrolState");
+        }
+
+        // Transition to chasing state if player is visible enough
+        if (enemy.fov.percentRaysOnPlayer >= 0.1)
+        {
+            enemy.controller.TransitionTo("GuardChaseState");
+        }
     }
 
     /// <summary>
