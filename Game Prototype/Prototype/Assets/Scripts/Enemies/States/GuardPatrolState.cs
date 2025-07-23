@@ -28,6 +28,7 @@ public class GuardPatrolState : EnemyState
         {
             enemy.controller.waypointManager.GetNextWaypoint();
             enemy.agent.SetDestination(enemy.controller.waypointManager.CurrentWaypoint().position);
+            // TODO: add rotation to the new point
         }
         // Update the field of view cone
         enemy.fov.SetViewDirection(enemy.agent.velocity);
@@ -36,6 +37,7 @@ public class GuardPatrolState : EnemyState
         // Transition to alert state if player enters field of view
         if (enemy.fov.percentRaysOnPlayer > 0)
         {
+            enemy.agent.isStopped = true;
             enemy.controller.TransitionTo("GuardAlertState");
         }
     }
@@ -48,6 +50,8 @@ public class GuardPatrolState : EnemyState
     {
         Debug.Log("Exited patrol");
     }
+
+
 
 
 }

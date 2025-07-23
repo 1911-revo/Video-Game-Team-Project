@@ -10,7 +10,9 @@ public class FieldOfView : MonoBehaviour
     [Header("Configuration")]
     [Range(0,360)]
     [SerializeField] public float fov = 90f;
+    [Range(0,20)]
     [SerializeField] public float viewDistance;
+    [Range(2,100)]
     [SerializeField] private int rayCount = 2;
 
     [Header("Interactable Layers")]
