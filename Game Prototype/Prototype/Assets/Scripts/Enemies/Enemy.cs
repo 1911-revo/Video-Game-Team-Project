@@ -36,6 +36,7 @@ public class Enemy : MonoBehaviour
         {
             Debug.Log("Enemy AI agent not found!");
         }
+
         agent.updateRotation = false;
         agent.updateUpAxis = false;
         agent.speed = stats.moveSpeed;

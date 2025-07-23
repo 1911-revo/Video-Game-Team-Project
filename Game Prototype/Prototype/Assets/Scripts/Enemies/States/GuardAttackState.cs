@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
-/// Instance of EnemyState scriptable object for patrolling behaviour of the standard guard enemy.
+/// Instance of EnemyState scriptable object for attacking behaviour of the standard guard enemy.
 /// </summary>
 [CreateAssetMenu(menuName = "Enemies/States/GuardAttackState")]
 public class GuardAttackState : EnemyState
@@ -18,8 +18,9 @@ public class GuardAttackState : EnemyState
     /// <param name="enemy"> Enemy instance </param> 
     public override void Enter(Enemy enemy)
     {
+        enemy.agent.stoppingDistance = 2f; // To avoid enemy pushing the player
         Debug.Log("Entered attack");
-        enemy.agent.stoppingDistance = 1.5f;
+        lastAttackTime = 0;
     }
 
     /// <summary>
@@ -28,7 +29,17 @@ public class GuardAttackState : EnemyState
     /// <param name="enemy"> Enemy instance </param>
     public override void Tick(Enemy enemy)
     {
+        // Constantly pathfind to the plaayer's position
         enemy.agent.SetDestination(enemy.player.position);
+
+        // Ensure enemy does not push the player
+        if (enemy.agent.remainingDistance <= enemy.agent.stoppingDistance)
+        {
+            enemy.agent.isStopped = true;
+        } else
+        {
+            enemy.agent.isStopped = false;
+        }
 
         // Update the field of view cone
         Vector3 toPlayer = (enemy.player.position - enemy.transform.position).normalized;
@@ -36,12 +47,12 @@ public class GuardAttackState : EnemyState
         enemy.fov.RotateViewCone();
         enemy.fov.SetOrigin(enemy.agent.nextPosition);
 
+        // If possible, attack the player
         if (Time.time - lastAttackTime >= enemy.stats.attackCooldown)
         {
             enemy.controller.attack?.Attack(enemy.transform, enemy.player.transform, enemy.stats);
             lastAttackTime = Time.time;
         }
-
 
         // Transition to searching state if player exits field of view
         if (enemy.fov.percentRaysOnPlayer == 0)

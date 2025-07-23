@@ -15,7 +15,6 @@ public class GuardPatrolState : EnemyState
     public override void Enter(Enemy enemy)
     {
         Debug.Log("Entered patrol");
-
     }
 
     /// <summary>
@@ -50,8 +49,4 @@ public class GuardPatrolState : EnemyState
     {
         Debug.Log("Exited patrol");
     }
-
-
-
-
 }

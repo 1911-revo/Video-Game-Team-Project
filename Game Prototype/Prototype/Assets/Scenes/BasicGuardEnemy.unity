@@ -13009,7 +13009,6 @@ MonoBehaviour:
   fov: 45
   viewDistance: 2
   rayCount: 50
-  rotationSpeed: 180
   environmentLayerMask:
     serializedVersion: 2
     m_Bits: 64

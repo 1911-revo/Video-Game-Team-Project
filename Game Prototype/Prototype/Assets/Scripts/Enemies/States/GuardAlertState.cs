@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
-/// Instance of EnemyState scriptable object for patrolling behaviour of the standard guard enemy.
+/// Instance of EnemyState scriptable object for alerted behaviour of the standard guard enemy.
 /// </summary>
 [CreateAssetMenu(menuName = "Enemies/States/GuardAlertState")]
 public class GuardAlertState : EnemyState
@@ -33,10 +33,9 @@ public class GuardAlertState : EnemyState
         }
         // Update the field of view cone
         Vector3 toPlayer = (enemy.player.position - enemy.transform.position).normalized;
-        enemy.fov.SetViewDirection(toPlayer, 120);
+        enemy.fov.SetViewDirection(toPlayer, 90);
         enemy.fov.RotateViewCone();
         enemy.fov.SetOrigin(enemy.agent.nextPosition);
-
 
         // Transition to patrol state if player exits field of view
         if (enemy.fov.percentRaysOnPlayer == 0)
@@ -45,7 +44,7 @@ public class GuardAlertState : EnemyState
         }
 
         // Transition to chasing state if player is visible enough
-        if (enemy.fov.percentRaysOnPlayer >= 0.1)
+        if (enemy.fov.percentRaysOnPlayer >= 0.2)
         {
             enemy.controller.TransitionTo("GuardChaseState");
         }
@@ -59,8 +58,4 @@ public class GuardAlertState : EnemyState
     {
         Debug.Log("Exited alert");
     }
-
-
-
-
 }

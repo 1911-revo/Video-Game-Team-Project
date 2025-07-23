@@ -15,7 +15,7 @@ MonoBehaviour:
   health: 10
   moveSpeed: 2
   damage: 3
-  viewDistance: 8
+  viewDistance: 6
   fov: 45
-  attackRange: 3
+  attackRange: 5
   attackCooldown: 3

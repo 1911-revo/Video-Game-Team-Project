@@ -14,8 +14,6 @@ public class FieldOfView : MonoBehaviour
     [SerializeField] public float viewDistance;
     [Range(2,100)]
     [SerializeField] private int rayCount = 2;
-    [Range(0, 360)]
-    [SerializeField] private float rotationSpeed;
 
     [Header("Interactable Layers")]
     [SerializeField] private LayerMask environmentLayerMask;
@@ -26,7 +24,7 @@ public class FieldOfView : MonoBehaviour
     private Vector3 origin;
     private float startingAngle;
     private float targetAngle;
-
+    private float rotationSpeed;
 
     [HideInInspector] public float percentRaysOnPlayer;
 
@@ -131,22 +129,39 @@ public class FieldOfView : MonoBehaviour
         return angle;
     }
 
+    /// <summary>
+    /// Set the origin of the view cone
+    /// </summary>
+    /// <param name="origin"> Origin of the view cone </param>
     public void SetOrigin(Vector3 origin)
     {
         this.origin = origin;
     }
 
+    /// <summary>
+    /// Set the desired target direction of the enemy and the speed to rotate the 
+    /// view cone at to get to this direction
+    /// </summary>
+    /// <param name="direction"> Target direction of the enemies view cone </param>
+    /// <param name="speed"> Speed at which the view cone will be rotated towards the target direction </param>
     public void SetViewDirection(Vector3 direction, float speed)
     {
         rotationSpeed = speed;
         targetAngle = AngleFromVector(direction) - fov / 2f;
     }
 
+    /// <summary>
+    /// Move the direction of the view cone towards the target direction at rotationSpeed
+    /// </summary>
     public void RotateViewCone()
     {
         startingAngle = Mathf.MoveTowardsAngle(startingAngle, targetAngle, rotationSpeed * Time.deltaTime);
     }
 
+    /// <summary>
+    /// Get the starting angle of the current view cone
+    /// </summary>
+    /// <returns> Starting angle of view cone </returns>
     public float GetCurrentAngle()
     {
         return startingAngle;

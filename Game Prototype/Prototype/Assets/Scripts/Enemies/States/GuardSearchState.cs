@@ -27,6 +27,9 @@ public class GuardSearchState : EnemyState
     public override void Enter(Enemy enemy)
     {
         Debug.Log("Entered search");
+        enemy.agent.isStopped = false;
+
+        // Begin moving to the player's last known location
         lastPlayerPos = enemy.player.position;
         enemy.agent.SetDestination(lastPlayerPos);
         currentPhase = SearchPhase.Travel;
@@ -44,7 +47,7 @@ public class GuardSearchState : EnemyState
             enemy.controller.TransitionTo("GuardChaseState");
         }
 
-
+        // Move through phases of the search process
         switch (currentPhase)
         {
             // Still moving to last known location of the player
@@ -57,7 +60,7 @@ public class GuardSearchState : EnemyState
                     lookTimer = 0f;
 
                     // Set target direction 90 degrees left
-                    float leftAngle = baseAngle - 90f;
+                    float leftAngle = baseAngle - 85f;
                     enemy.fov.SetViewDirection(FieldOfView.VectorFromAngle(leftAngle + enemy.fov.fov / 2f), 90f);
                 }
                 break;
@@ -74,7 +77,7 @@ public class GuardSearchState : EnemyState
                     lookTimer = 0f;
 
                     // Set target direction 90 degrees right of initial direction
-                    float rightAngle = baseAngle + 90f;
+                    float rightAngle = baseAngle + 85f;
                     enemy.fov.SetViewDirection(FieldOfView.VectorFromAngle(rightAngle + enemy.fov.fov / 2f), 90f);
                 }
                 break;

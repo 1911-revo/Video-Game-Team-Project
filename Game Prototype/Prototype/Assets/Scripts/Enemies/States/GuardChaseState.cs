@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
-/// Instance of EnemyState scriptable object for patrolling behaviour of the standard guard enemy.
+/// Instance of EnemyState scriptable object for chasing behaviour of the standard guard enemy.
 /// </summary>
 [CreateAssetMenu(menuName = "Enemies/States/GuardChaseState")]
 public class GuardChaseState : EnemyState
@@ -25,6 +25,7 @@ public class GuardChaseState : EnemyState
     /// <param name="enemy"> Enemy instance </param>
     public override void Tick(Enemy enemy)
     {
+        // Constantly path to the player's position
         enemy.agent.SetDestination(enemy.player.position);
 
         // Update the field of view cone
@@ -55,8 +56,4 @@ public class GuardChaseState : EnemyState
     {
         Debug.Log("Exited chase");
     }
-
-
-
-
 }
