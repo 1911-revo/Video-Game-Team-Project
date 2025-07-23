@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using TMPro;
-using UnityEditor.UI;
 using UnityEngine;
 
 public class Dialogue : MonoBehaviour
@@ -13,25 +12,31 @@ public class Dialogue : MonoBehaviour
     [SerializeField] private float shakeAmount = 0.5f;
     [SerializeField] private GameObject dialogueBox;
 
+    // Audio playback - only AudioSource needed now
+    [SerializeField] private AudioSource audioSource;
+
+    // Dictionary for current dialogue's sounds
+    private Dictionary<string, AudioClip> soundDictionary = new Dictionary<string, AudioClip>();
+
+    // Command callbacks
+    public delegate void CommandCallback(string parameter);
+    private Dictionary<string, CommandCallback> commandCallbacks = new Dictionary<string, CommandCallback>();
+
     public string[] dialogueLines;
     public int currentLineIndex;
     public bool isTyping;
     public bool dialogueStarted;
     private Coroutine typingCoroutine;
     private Coroutine shakeCoroutine;
-    
+
     // Store indices of characters that should shake
     private List<int> shakeIndices = new List<int>();
-    
-    string[] testDialogue = new string[]
-    {
-        "Hello, this is test dialogue.",
-        "Some of this text should appear *#FF0000(red).",
-        "This text should *SHAKE(shake).",
-        "This text should be written, and then *CHANGE((change.),(stay exactly the same)). Woah thats so crazy!",
-        "And effects *SHAKE(*#0000FF(Should stack)) (Hopefully)."
-    };
-    
+
+    // Branching dialogue fields
+    public delegate void DialogueCallback();
+    private DialogueCallback onDialogueLineComplete;
+    private bool waitingForChoice = false;
+
     void Start()
     {
         if (textComponent == null)
@@ -43,11 +48,12 @@ public class Dialogue : MonoBehaviour
         // Hide the dialogue by default
         SetDialogueVisibility(false);
     }
-    
+
     void Update()
     {
-        // Handle Enter key to advance dialogue
-        if (dialogueStarted && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
+        // Only allow dialogue advancement if not waiting for choice
+        if (dialogueStarted && !waitingForChoice &&
+            (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
         {
             if (isTyping)
             {
@@ -63,7 +69,38 @@ public class Dialogue : MonoBehaviour
         }
     }
 
-    //Hide / unhide gameobject
+    // New method to set the sound dictionary for current dialogue
+    public void SetSoundDictionary(Dictionary<string, AudioClip> sounds)
+    {
+        soundDictionary = sounds ?? new Dictionary<string, AudioClip>();
+    }
+
+    // Register a command callback
+    public void RegisterCommand(string commandName, CommandCallback callback)
+    {
+        commandCallbacks[commandName] = callback;
+    }
+
+    // Play a sound by name
+    public void PlaySound(string soundName)
+    {
+        if (audioSource == null)
+        {
+            Debug.LogWarning("AudioSource not assigned to Dialogue component!");
+            return;
+        }
+
+        if (soundDictionary.ContainsKey(soundName))
+        {
+            audioSource.PlayOneShot(soundDictionary[soundName]);
+        }
+        else
+        {
+            Debug.LogWarning($"Sound not found: {soundName}");
+        }
+    }
+
+    // Hide / unhide gameobject
     void SetDialogueVisibility(bool visible)
     {
         if (dialogueBox != null)
@@ -76,52 +113,126 @@ public class Dialogue : MonoBehaviour
         }
     }
 
-    // Start dialogue with given text lines
-    public void StartDialogue(string[] lines)
+    // Set callback for dialogue completion
+    public void SetDialogueCallback(DialogueCallback callback)
+    {
+        onDialogueLineComplete = callback;
+    }
+
+    // Enable/disable player input during choice selection
+    public void WaitForChoice(bool waiting)
+    {
+        waitingForChoice = waiting;
+    }
+
+    // Start dialogue with given text lines and optional sound dictionary
+    public void StartDialogue(string[] lines, Dictionary<string, AudioClip> sounds = null)
     {
         StopAllCoroutines();
-        
+
+        if (sounds != null)
+        {
+            SetSoundDictionary(sounds);
+        }
+
         dialogueLines = lines;
         currentLineIndex = 0;
         dialogueStarted = true;
-        
+        waitingForChoice = false;
+
         shakeIndices.Clear();
-        
+
         DisplayNextLine();
         SetDialogueVisibility(true);
     }
-    
+
+    // Start dialogue with given text lines (original method for backwards compatibility)
+    public void StartDialogue(string[] lines)
+    {
+        StartDialogue(lines, null);
+    }
+
+    // Start dialogue with a single line and optional callback and sounds
+    public void StartDialogue(string line, DialogueCallback callback = null, Dictionary<string, AudioClip> sounds = null)
+    {
+        StopAllCoroutines();
+
+        if (sounds != null)
+        {
+            SetSoundDictionary(sounds);
+        }
+
+        dialogueLines = new string[] { line };
+        currentLineIndex = 0;
+        dialogueStarted = true;
+        waitingForChoice = false;
+
+        shakeIndices.Clear();
+        onDialogueLineComplete = callback;
+
+        DisplayNextLine();
+        SetDialogueVisibility(true);
+    }
+
+    // Start dialogue with a single line and optional callback (original method for backwards compatibility)
+    public void StartDialogue(string line, DialogueCallback callback = null)
+    {
+        StartDialogue(line, callback, null);
+    }
+
+    // Show a single dialogue node (for branching dialogue)
+    public void ShowDialogueNode(DialogueNode node, DialogueCallback callback = null)
+    {
+        if (node == null) return;
+
+        StartDialogue(node.text, callback);
+    }
+
     // Show next line in the sequence
     public void DisplayNextLine()
     {
         if (!dialogueStarted)
             return;
-            
+
+        // Make sure the dialogue box is active
+        if (!dialogueBox.activeInHierarchy)
+        {
+            SetDialogueVisibility(true);
+        }
+
         // Check if we're out of lines
         if (currentLineIndex >= dialogueLines.Length)
         {
-            EndDialogue();
+            // Trigger callback before ending
+            DialogueCallback callback = onDialogueLineComplete;
+            onDialogueLineComplete = null;
+
+            if (callback != null)
+                callback();
+            else
+                EndDialogue();
+
             return;
         }
-        
+
         // If mid-typing, complete it immediately
         if (isTyping)
         {
             CompleteCurrentLine();
             return;
         }
-        
+
         shakeIndices.Clear();
-        
+
         if (shakeCoroutine != null)
         {
             StopCoroutine(shakeCoroutine);
             shakeCoroutine = null;
         }
-        
+
         typingCoroutine = StartCoroutine(TypeLine(dialogueLines[currentLineIndex]));
     }
-    
+
     // Display full line immediately
     public void CompleteCurrentLine()
     {
@@ -129,50 +240,50 @@ public class Dialogue : MonoBehaviour
         {
             StopCoroutine(typingCoroutine);
             isTyping = false;
-            
+
             string line = dialogueLines[currentLineIndex];
-            
+
             // For CHANGE command, skip to second part
             Regex changeRegex = new Regex(@"\*CHANGE\(\(([^)]*)\),\(([^)]*)\)\)");
             if (changeRegex.IsMatch(line))
             {
                 line = changeRegex.Replace(line, match => match.Groups[2].Value);
             }
-            
+
             // Process the text with all formatting
             string processedText = ProcessFormattingWithShake(line, out List<ShakeRange> shakeRanges);
             textComponent.text = processedText;
-            
+
             textComponent.ForceMeshUpdate();
-            
+
             SetupShakeIndicesFromRanges(shakeRanges);
-            
+
             if (shakeIndices.Count > 0 && shakeCoroutine == null)
             {
                 shakeCoroutine = StartCoroutine(ShakeCharacters());
             }
         }
     }
-    
+
     // Simple class to track character ranges that should shake
     private class ShakeRange
     {
         public int startIndex;
         public int length;
-        
+
         public ShakeRange(int start, int length)
         {
             this.startIndex = start;
             this.length = length;
         }
     }
-    
+
     // Process text formatting and collect shake ranges
     private string ProcessFormattingWithShake(string input, out List<ShakeRange> shakeRanges)
     {
         shakeRanges = new List<ShakeRange>();
         string processedText = input;
-        
+
         // Handle nested formatting
         // Process color formatting everywhere including in shake areas
         // *#RRGGBB(text) -> <color=#RRGGBB>text</color>
@@ -182,60 +293,90 @@ public class Dialogue : MonoBehaviour
             string text = match.Groups[2].Value;
             return $"<color=#{colorCode}>{text}</color>";
         });
-        
+
+        // Process INVOKE command - *INVOKE(command:parameter)
+        string invokePattern = @"\*INVOKE\(([^)]*)\)";
+        processedText = Regex.Replace(processedText, invokePattern, match => {
+            string commandParameter = match.Groups[1].Value;
+            // Try to extract command name and parameters
+            string[] parts = commandParameter.Split(new char[] { ':' }, 2);
+            string commandName = parts[0].Trim();
+            string parameter = parts.Length > 1 ? parts[1].Trim() : "";
+
+            // Execute the command if registered
+            if (commandCallbacks.ContainsKey(commandName))
+            {
+                commandCallbacks[commandName](parameter);
+            }
+            else
+            {
+                Debug.LogWarning($"Command not found: {commandName}");
+            }
+
+            return ""; // Remove the command from displayed text
+        });
+
+        // Process PLAY command - *PLAY(soundName)
+        string playPattern = @"\*PLAY\(([^)]*)\)";
+        processedText = Regex.Replace(processedText, playPattern, match => {
+            string soundName = match.Groups[1].Value.Trim();
+            PlaySound(soundName);
+            return ""; // Remove the command from displayed text
+        });
+
         // Handle text shaking formatting
         // For this, we'll need to track character positions carefully
         string outputText = processedText;
         string shakePattern = @"\*SHAKE\(([^)]*)\)";
-        
+
         // Find all shake matches and process them
         MatchCollection shakeMatches = Regex.Matches(processedText, shakePattern);
-        
+
         // Keep track of character positions as we remove shake tags
         int currentOffset = 0;
-        
+
         // Map to keep track of character position changes after tags are removed
         Dictionary<int, int> positionMap = new Dictionary<int, int>();
         for (int i = 0; i <= processedText.Length; i++)
         {
             positionMap[i] = i;
         }
-        
+
         foreach (Match match in shakeMatches)
         {
             string shakeContent = match.Groups[1].Value;
-            
+
             // Calculate the original positions in the text
             int matchStart = match.Index;
             int matchEnd = match.Index + match.Length;
-            
+
             // Adjust for previous changes
             int adjustedStart = matchStart - currentOffset;
-            
+
             // Calculate visible character indices
             int visibleStartIndex = CountVisibleCharsInRichText(outputText.Substring(0, adjustedStart));
             int visibleLength = CountVisibleCharsInRichText(shakeContent);
-            
+
             // Add the shake range
             shakeRanges.Add(new ShakeRange(visibleStartIndex, visibleLength));
-            
+
             // Remove the shake tag but keep the content
             outputText = outputText.Remove(adjustedStart, match.Length);
             outputText = outputText.Insert(adjustedStart, shakeContent);
-            
+
             // Update the offset for future matches
             currentOffset += (match.Length - shakeContent.Length);
         }
-        
+
         return outputText;
     }
-    
+
     // Count visible characters in rich text (ignoring tags)
     private int CountVisibleCharsInRichText(string text)
     {
         int count = 0;
         bool inTag = false;
-        
+
         for (int i = 0; i < text.Length; i++)
         {
             if (text[i] == '<')
@@ -251,16 +392,16 @@ public class Dialogue : MonoBehaviour
                 count++;
             }
         }
-        
+
         return count;
     }
-  
-    
+
+
     // Convert shake ranges to character indices
     private void SetupShakeIndicesFromRanges(List<ShakeRange> shakeRanges)
     {
         shakeIndices.Clear();
-        
+
         foreach (ShakeRange range in shakeRanges)
         {
             for (int i = 0; i < range.length; i++)
@@ -273,7 +414,7 @@ public class Dialogue : MonoBehaviour
             }
         }
     }
-    
+
     // Make marked characters wiggle
     private IEnumerator ShakeCharacters()
     {
@@ -285,68 +426,68 @@ public class Dialogue : MonoBehaviour
                 yield return null;
                 continue;
             }
-            
+
             textComponent.ForceMeshUpdate();
             TMP_TextInfo textInfo = textComponent.textInfo;
-            
+
             if (textInfo.characterCount == 0)
             {
                 yield return null;
                 continue;
             }
-            
+
             foreach (int i in shakeIndices)
             {
                 // Skip invalid indices
                 if (i >= textInfo.characterCount)
                     continue;
-                
+
                 // Skip hidden chars
                 if (!textInfo.characterInfo[i].isVisible)
                     continue;
-                
+
                 TMP_CharacterInfo charInfo = textInfo.characterInfo[i];
-                
+
                 int materialIndex = charInfo.materialReferenceIndex;
                 int vertexIndex = charInfo.vertexIndex;
-                
+
                 Vector3[] vertices = textInfo.meshInfo[materialIndex].vertices;
-                
+
                 // Find center point of character
-                Vector3 centerPos = (vertices[vertexIndex] + vertices[vertexIndex + 1] + 
+                Vector3 centerPos = (vertices[vertexIndex] + vertices[vertexIndex + 1] +
                                      vertices[vertexIndex + 2] + vertices[vertexIndex + 3]) / 4f;
-                
+
                 // Random offset
                 Vector3 offset = new Vector3(
                     Random.Range(-shakeAmount, shakeAmount),
                     Random.Range(-shakeAmount, shakeAmount),
                     0
                 );
-                
+
                 // Move all 4 verts of the character
                 vertices[vertexIndex] = vertices[vertexIndex] - centerPos + (centerPos + offset);
                 vertices[vertexIndex + 1] = vertices[vertexIndex + 1] - centerPos + (centerPos + offset);
                 vertices[vertexIndex + 2] = vertices[vertexIndex + 2] - centerPos + (centerPos + offset);
                 vertices[vertexIndex + 3] = vertices[vertexIndex + 3] - centerPos + (centerPos + offset);
             }
-            
+
             // Apply the changes
             for (int i = 0; i < textInfo.meshInfo.Length; i++)
             {
                 textInfo.meshInfo[i].mesh.vertices = textInfo.meshInfo[i].vertices;
                 textComponent.UpdateGeometry(textInfo.meshInfo[i].mesh, i);
             }
-            
+
             yield return new WaitForSeconds(0.05f); // Shake frequency
         }
     }
-    
+
     // Go to next line
     public void AdvanceDialogue()
     {
         if (!dialogueStarted)
             return;
-            
+
         if (isTyping)
         {
             CompleteCurrentLine();
@@ -357,117 +498,211 @@ public class Dialogue : MonoBehaviour
             DisplayNextLine();
         }
     }
-    
+
     // Clean up and reset
     public void EndDialogue()
     {
         StopAllCoroutines();
         shakeCoroutine = null;
-        
+
         dialogueStarted = false;
         textComponent.text = string.Empty;
         shakeIndices.Clear();
+        waitingForChoice = false;
         SetDialogueVisibility(false);
+
+        // Call any final callback
+        if (onDialogueLineComplete != null)
+        {
+            DialogueCallback callback = onDialogueLineComplete;
+            onDialogueLineComplete = null;
+            callback();
+        }
     }
-    
+
     // Type out text with a delay between characters
     private IEnumerator TypeLine(string line)
     {
+        if (textComponent == null)
+        {
+            Debug.LogError("TextComponent is null! Please assign it in the inspector.");
+            yield break;
+        }
+
         isTyping = true;
         textComponent.text = string.Empty;
         shakeIndices.Clear();
-        
+
+        // Safety check for null input
+        if (string.IsNullOrEmpty(line))
+        {
+            Debug.LogWarning("Empty dialogue line received.");
+            line = " "; // Use a space as fallback
+        }
+
         // Extract parts for CHANGE command
         bool hasChangeCommand = false;
         string firstPart = line;
         string secondPart = line;
-        
-        Regex changeRegex = new Regex(@"\*CHANGE\(\(([^)]*)\),\(([^)]*)\)\)");
-        Match changeMatch = changeRegex.Match(line);
-        
-        if (changeMatch.Success)
+
+        // Process CHANGE command - wrapped in separate try-catch
+        try
         {
-            hasChangeCommand = true;
-            // First part for typing
-            firstPart = line.Substring(0, changeMatch.Index) + changeMatch.Groups[1].Value +
-                        line.Substring(changeMatch.Index + changeMatch.Length);
-            
-            // Second part for after typing finishes
-            secondPart = line.Substring(0, changeMatch.Index) + changeMatch.Groups[2].Value +
-                         line.Substring(changeMatch.Index + changeMatch.Length);
+            Regex changeRegex = new Regex(@"\*CHANGE\(\(([^)]*)\),\(([^)]*)\)\)");
+            Match changeMatch = changeRegex.Match(line);
+
+            if (changeMatch.Success)
+            {
+                hasChangeCommand = true;
+                // First part for typing
+                firstPart = line.Substring(0, changeMatch.Index) + changeMatch.Groups[1].Value +
+                            line.Substring(changeMatch.Index + changeMatch.Length);
+
+                // Second part for after typing finishes
+                secondPart = line.Substring(0, changeMatch.Index) + changeMatch.Groups[2].Value +
+                             line.Substring(changeMatch.Index + changeMatch.Length);
+            }
         }
-        
+        catch (System.Exception e)
+        {
+            Debug.LogError("Error processing CHANGE command: " + e.Message);
+            // If there's an error, just use the original line
+            firstPart = line;
+            secondPart = line;
+            hasChangeCommand = false;
+        }
+
         // Process text and get shake ranges
-        List<ShakeRange> typingShakeRanges;
-        string processedFirstPart = ProcessFormattingWithShake(firstPart, out typingShakeRanges);
-        
+        List<ShakeRange> typingShakeRanges = new List<ShakeRange>();
+        string processedFirstPart;
+
+        try
+        {
+            processedFirstPart = ProcessFormattingWithShake(firstPart, out typingShakeRanges);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Error processing text formatting: " + e.Message);
+            processedFirstPart = firstPart; // Use original if processing fails
+            typingShakeRanges = new List<ShakeRange>();
+        }
+
         // Plain version for counting
         string plainText = Regex.Replace(processedFirstPart, @"<[^>]*>", "");
-        
+
         // Type out each character
         for (int visibleCharCount = 1; visibleCharCount <= plainText.Length; visibleCharCount++)
         {
-            string partialText = GetTextUpToVisibleCharCount(processedFirstPart, visibleCharCount);
-            textComponent.text = partialText;
-            
-            textComponent.ForceMeshUpdate();
-            
-            // Figure out which characters shake in this partial text
-            List<ShakeRange> partialShakeRanges = new List<ShakeRange>();
-            foreach (ShakeRange range in typingShakeRanges)
+            if (textComponent == null)
             {
-                if (range.startIndex < visibleCharCount)
+                Debug.LogError("TextComponent became null during typing!");
+                yield break;
+            }
+
+            string partialText;
+            try
+            {
+                partialText = GetTextUpToVisibleCharCount(processedFirstPart, visibleCharCount);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("Error getting partial text: " + e.Message);
+                partialText = processedFirstPart.Substring(0, Mathf.Min(visibleCharCount, processedFirstPart.Length));
+            }
+
+            textComponent.text = partialText;
+            textComponent.ForceMeshUpdate();
+
+            // Figure out which characters shake in this partial text
+            try
+            {
+                List<ShakeRange> partialShakeRanges = new List<ShakeRange>();
+                foreach (ShakeRange range in typingShakeRanges)
                 {
-                    int visibleLength = Mathf.Min(range.length, visibleCharCount - range.startIndex);
-                    partialShakeRanges.Add(new ShakeRange(range.startIndex, visibleLength));
+                    if (range.startIndex < visibleCharCount)
+                    {
+                        int visibleLength = Mathf.Min(range.length, visibleCharCount - range.startIndex);
+                        partialShakeRanges.Add(new ShakeRange(range.startIndex, visibleLength));
+                    }
+                }
+
+                SetupShakeIndicesFromRanges(partialShakeRanges);
+
+                if (shakeIndices.Count > 0 && shakeCoroutine == null && gameObject.activeInHierarchy)
+                {
+                    shakeCoroutine = StartCoroutine(ShakeCharacters());
                 }
             }
-            
-            SetupShakeIndicesFromRanges(partialShakeRanges);
-            
-            if (shakeIndices.Count > 0 && shakeCoroutine == null)
+            catch (System.Exception e)
             {
-                shakeCoroutine = StartCoroutine(ShakeCharacters());
+                Debug.LogError("Error setting up shake indices: " + e.Message);
             }
-            
+
             yield return new WaitForSeconds(typingSpeed);
         }
-        
+
         // For CHANGE effect, swap to second part
         if (hasChangeCommand)
         {
-            List<ShakeRange> secondShakeRanges;
-            string processedSecondPart = ProcessFormattingWithShake(secondPart, out secondShakeRanges);
-            textComponent.text = processedSecondPart;
-            
-            textComponent.ForceMeshUpdate();
-            SetupShakeIndicesFromRanges(secondShakeRanges);
-            
-            if (shakeCoroutine != null)
+            try
             {
-                StopCoroutine(shakeCoroutine);
+                List<ShakeRange> secondShakeRanges = new List<ShakeRange>();
+                string processedSecondPart = ProcessFormattingWithShake(secondPart, out secondShakeRanges);
+
+                if (textComponent != null)
+                {
+                    textComponent.text = processedSecondPart;
+                    textComponent.ForceMeshUpdate();
+                }
+
+                SetupShakeIndicesFromRanges(secondShakeRanges);
+
+                if (shakeCoroutine != null)
+                {
+                    StopCoroutine(shakeCoroutine);
+                    shakeCoroutine = null;
+                }
+
+                if (shakeIndices.Count > 0 && gameObject.activeInHierarchy)
+                {
+                    shakeCoroutine = StartCoroutine(ShakeCharacters());
+                }
             }
-            
-            if (shakeIndices.Count > 0)
+            catch (System.Exception e)
             {
-                shakeCoroutine = StartCoroutine(ShakeCharacters());
+                Debug.LogError("Error processing second part: " + e.Message);
+                if (textComponent != null)
+                {
+                    textComponent.text = secondPart; // Fallback to unprocessed text
+                }
             }
         }
-        
+
         isTyping = false;
+
+        // If this is the last line and we're on a single-line dialogue with callback
+        if (dialogueLines != null && dialogueLines.Length == 1 && onDialogueLineComplete != null && !waitingForChoice)
+        {
+            // Optional: Wait a short moment before triggering callback
+            yield return new WaitForSeconds(0.5f);
+            DialogueCallback callback = onDialogueLineComplete;
+            onDialogueLineComplete = null;
+            if (callback != null)
+                callback();
+        }
     }
-    
+
     // Get text up to a specific visible character count
     private string GetTextUpToVisibleCharCount(string richText, int visibleCharCount)
     {
         StringBuilder result = new StringBuilder();
         int visibleCount = 0;
         bool inTag = false;
-        
+
         for (int i = 0; i < richText.Length; i++)
         {
             char c = richText[i];
-            
+
             if (c == '<')
             {
                 inTag = true;
@@ -486,7 +721,7 @@ public class Dialogue : MonoBehaviour
             {
                 result.Append(c);
                 visibleCount++;
-                
+
                 if (visibleCount >= visibleCharCount)
                 {
                     // Add any closing tags that might be needed
@@ -495,15 +730,15 @@ public class Dialogue : MonoBehaviour
                 }
             }
         }
-        
+
         return result.ToString();
     }
-    
+
     // Make sure all open tags are closed in partial text
     private void AddClosingTags(string fullText, int currentPos, StringBuilder partialText)
     {
         Stack<string> openTags = new Stack<string>();
-        
+
         // Find all open tags up to the current position
         int pos = 0;
         while (pos <= currentPos)
@@ -511,13 +746,13 @@ public class Dialogue : MonoBehaviour
             int tagStart = fullText.IndexOf('<', pos);
             if (tagStart == -1 || tagStart > currentPos)
                 break;
-            
+
             int tagEnd = fullText.IndexOf('>', tagStart);
             if (tagEnd == -1)
                 break;
-            
+
             string tag = fullText.Substring(tagStart + 1, tagEnd - tagStart - 1);
-            
+
             if (tag.StartsWith("/"))
             {
                 // Close tag - pop matching open tag
@@ -531,10 +766,10 @@ public class Dialogue : MonoBehaviour
                 // Open tag - add to stack
                 openTags.Push(tag);
             }
-            
+
             pos = tagEnd + 1;
         }
-        
+
         // Add closing tags in reverse order
         while (openTags.Count > 0)
         {
