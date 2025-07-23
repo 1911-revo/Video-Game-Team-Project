@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      CyberSoldier_0: -8843720860963620782
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

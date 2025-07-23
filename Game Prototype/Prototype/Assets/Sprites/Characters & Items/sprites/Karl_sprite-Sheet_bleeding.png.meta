@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Karl_sprite-Sheet_bleeding_0: -6034644292589698440
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

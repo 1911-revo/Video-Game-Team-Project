@@ -309,7 +309,15 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Karl_holdItem-Sheet_0: 4089075692520451301
+      Karl_holdItem-Sheet_1: -8616649125605914069
+      Karl_holdItem-Sheet_2: 4664328821778722024
+      Karl_holdItem-Sheet_3: -6850226496619135904
+      Karl_holdItem-Sheet_4: -8495037585591768973
+      Karl_holdItem-Sheet_5: -7269208154246706522
+      Karl_holdItem-Sheet_6: 4160523540438938726
+      Karl_holdItem-Sheet_7: -69789355854934694
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
