@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: GuardStats
   m_EditorClassIdentifier: 
   health: 10
-  moveSpeed: 3.5
+  moveSpeed: 2
   damage: 3
-  viewDistance: 15
+  viewDistance: 5
   fov: 45
   attackRange: 1.1
   attackCooldown: 3

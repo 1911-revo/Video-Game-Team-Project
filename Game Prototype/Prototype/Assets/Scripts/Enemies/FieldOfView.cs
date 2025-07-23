@@ -14,6 +14,8 @@ public class FieldOfView : MonoBehaviour
     [SerializeField] public float viewDistance;
     [Range(2,100)]
     [SerializeField] private int rayCount = 2;
+    [Range(0, 360)]
+    [SerializeField] private float rotationSpeed;
 
     [Header("Interactable Layers")]
     [SerializeField] private LayerMask environmentLayerMask;
@@ -23,6 +25,9 @@ public class FieldOfView : MonoBehaviour
     private LayerMask combinedLayerMask;
     private Vector3 origin;
     private float startingAngle;
+    private float targetAngle;
+
+
     [HideInInspector] public float percentRaysOnPlayer;
 
     private void Start()
@@ -131,8 +136,19 @@ public class FieldOfView : MonoBehaviour
         this.origin = origin;
     }
 
-    public void SetViewDirection(Vector3 direction)
+    public void SetViewDirection(Vector3 direction, float speed)
     {
-        startingAngle = AngleFromVector(direction) - fov / 2f;
+        rotationSpeed = speed;
+        targetAngle = AngleFromVector(direction) - fov / 2f;
+    }
+
+    public void RotateViewCone()
+    {
+        startingAngle = Mathf.MoveTowardsAngle(startingAngle, targetAngle, rotationSpeed * Time.deltaTime);
+    }
+
+    public float GetCurrentAngle()
+    {
+        return startingAngle;
     }
 }
