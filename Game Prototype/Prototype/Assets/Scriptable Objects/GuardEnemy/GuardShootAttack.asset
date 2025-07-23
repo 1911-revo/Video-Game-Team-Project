@@ -9,13 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e86bc1c5e63549479f637a5c8aa5453, type: 3}
-  m_Name: GuardStats
+  m_Script: {fileID: 11500000, guid: 37f059b3950e2354a8b41981ec558cdf, type: 3}
+  m_Name: GuardShootAttack
   m_EditorClassIdentifier: 
-  health: 10
-  moveSpeed: 2
-  damage: 3
-  viewDistance: 5
-  fov: 45
-  attackRange: 3
-  attackCooldown: 3

@@ -12421,10 +12421,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edfccbbfefde9e14ea0a68a4ecf7e8c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackSO: {fileID: 11400000, guid: ff80f5ca05d3b9f4fba6493e5b18d033, type: 2}
+  attackSO: {fileID: 11400000, guid: 47d48b0f6990ef5408fa0db5244f6e40, type: 2}
   states:
   - {fileID: 11400000, guid: 3104be69629358b4f87f8cf8a7c7dfc3, type: 2}
   - {fileID: 11400000, guid: 6419f5df882772d45ae1e29514d975aa, type: 2}
+  - {fileID: 11400000, guid: 8a4ccf365835f1547b545829b8f8d1a7, type: 2}
+  - {fileID: 11400000, guid: 3818149a9e4246d4b86963c5f32fe39d, type: 2}
   waypointManager: {fileID: 1068296990}
 --- !u!114 &1068296992
 MonoBehaviour:
