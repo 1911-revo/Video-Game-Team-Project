@@ -52,6 +52,9 @@ public class GuardSearchState : EnemyState
         {
             // Still moving to last known location of the player
             case SearchPhase.Travel:
+                Vector3 direction = (lastPlayerPos - enemy.transform.position).normalized;
+                enemy.fov.SetViewDirection(direction, 90);
+                enemy.fov.RotateViewCone();
                 // Point reached, begin looking left
                 if (!enemy.agent.pathPending && enemy.agent.remainingDistance <= enemy.agent.stoppingDistance)
                 {
