@@ -313,7 +313,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccdf41c19e7a03b449412770ca2954f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item:
+    id: 
+    name: 
+    isKeyItem: 0
+    isConsumed: 0
   collectedItems: []
+  beginingItems: []
+  keyItemObjects: []
   inventoryPanel: {fileID: 750599272}
   inventoryTextPrefab: {fileID: 7596974460302595094, guid: d2efc07317a825c4981fe125a221e3da, type: 3}
 --- !u!1 &134139863
@@ -1313,6 +1320,7 @@ MonoBehaviour:
     m_Bits: 0
   promptPrefab: {fileID: 2115296093}
   inventorySystem: {fileID: 123352760}
+  dialogueController: {fileID: 0}
   dialogueManager: {fileID: 0}
 --- !u!61 &228698745
 BoxCollider2D:
@@ -12422,6 +12430,14 @@ MonoBehaviour:
   offset: {x: 0.7, y: 0, z: -5}
   Bulletoffset: {x: 0, y: 0.109, z: 0}
   facing: 0
+  recoilBuildRate: 15
+  recoilDecayRate: 50
+  maxRecoil: 100
+  visualKickStrength: 0.25
+  visualReturnSpeed: 12
+  maxVisualKickback: 0.5
+  rotationKickStrength: 4
+  maxRotationKick: 12
   projectilePrefab: {fileID: 629720207950647196, guid: e1234ff0cd65e4d82ae174269b790db8, type: 3}
 --- !u!212 &1702335017
 SpriteRenderer:

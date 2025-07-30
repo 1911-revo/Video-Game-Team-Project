@@ -7,19 +7,31 @@ public class Weapons
 
     public int damage { get; set; }
 
-    
+    public int spread { get; set; }
 
-    public Weapons (string Name, int Damage){
+    public int knockback { get; set; }
+
+    public int fireRate { get; set; }
+
+
+
+    public Weapons (string Name, int Damage, int Spread, int Knockback, int FireRate)
+    {
 
         name = Name;
 
         damage = Damage;
 
+        spread = Spread;
+
+        knockback = Knockback;
+
+        fireRate = FireRate;
     }
 
     public override string ToString()
     {
-        return $"Weapon: {name}, Damage: {damage}";
+        return $"Weapon: {name}, Damage: {damage}, FireRate: {fireRate}, Spread: {spread}, Knockback {knockback}";
     }
     
 }

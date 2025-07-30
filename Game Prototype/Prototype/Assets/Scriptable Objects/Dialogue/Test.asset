@@ -21,37 +21,25 @@ MonoBehaviour:
     - choiceText: It Does
       targetNodeID: yes_work
     nextNodeID: 
-    isConditional: 0
-    conditionType: hasSpokenBefore
-    trueNodeID: 
-    falseNodeID: 
   - nodeID: no_work
     text: '*#FF0000(This is so sad) :('
     choices: []
     nextNodeID: 
-    isConditional: 0
-    conditionType: hasSpokenBefore
-    trueNodeID: 
-    falseNodeID: 
   - nodeID: yes_work
     text: '*SHAKE(Yay it work)'
     choices: []
     nextNodeID: 
-    isConditional: 0
-    conditionType: hasSpokenBefore
-    trueNodeID: 
-    falseNodeID: 
   - nodeID: start
     text: Hello I am an NPC! *PLAY(Start)
     choices: []
     nextNodeID: test_1
-    isConditional: 0
-    conditionType: hasSpokenBefore
-    trueNodeID: 
-    falseNodeID: 
+  - nodeID: repeat
+    text: Go away :(
+    choices: []
+    nextNodeID: 
   startNodeID: start
-  repeatStartNodeID: 
-  useRepeatDialogue: 0
+  repeatStartNodeID: repeat
+  useRepeatDialogue: 1
   audioClips:
   - {fileID: 8300000, guid: 749fb03bc3a972548858008c5ffdb879, type: 3}
   audioClipNames:
