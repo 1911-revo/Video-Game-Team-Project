@@ -63,7 +63,7 @@ public class GuardSearchState : EnemyState
                     lookTimer = 0f;
 
                     // Set target direction 90 degrees left
-                    float leftAngle = baseAngle - 85f;
+                    float leftAngle = baseAngle + 85f;
                     enemy.fov.SetViewDirection(FieldOfView.VectorFromAngle(leftAngle + enemy.fov.fov / 2f), 90f);
                 }
                 break;
@@ -80,7 +80,7 @@ public class GuardSearchState : EnemyState
                     lookTimer = 0f;
 
                     // Set target direction 90 degrees right of initial direction
-                    float rightAngle = baseAngle + 85f;
+                    float rightAngle = baseAngle - 85f;
                     enemy.fov.SetViewDirection(FieldOfView.VectorFromAngle(rightAngle + enemy.fov.fov / 2f), 90f);
                 }
                 break;
