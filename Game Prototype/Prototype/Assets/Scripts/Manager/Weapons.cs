@@ -7,8 +7,6 @@ public class Weapons
 
     public int damage { get; set; }
 
-    // Extended functionality
-
     public int spread { get; set; }
 
     public int knockback { get; set; }
