@@ -169,9 +169,6 @@ MonoBehaviour:
   stats: {fileID: 11400000, guid: 96c4850080f4de044a886e2f4efb953f, type: 2}
   player: {fileID: 0}
   controller: {fileID: 6147609289058702895}
-  patrolState: {fileID: 11400000, guid: fa26528881a1eba499a5330c9feb9be9, type: 2}
-  chaseState: {fileID: 11400000, guid: d38cae2c327275c43a532def375b4632, type: 2}
-  attackState: {fileID: 11400000, guid: 2275c1217035d4048a156bbd6d6c9c85, type: 2}
 --- !u!114 &6147609289058702895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,5 +181,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edfccbbfefde9e14ea0a68a4ecf7e8c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialState: {fileID: 11400000, guid: fa26528881a1eba499a5330c9feb9be9, type: 2}
   attackSO: {fileID: 11400000, guid: ff80f5ca05d3b9f4fba6493e5b18d033, type: 2}
+  states:
+  - {fileID: 11400000, guid: fa26528881a1eba499a5330c9feb9be9, type: 2}
+  - {fileID: 11400000, guid: d38cae2c327275c43a532def375b4632, type: 2}
+  - {fileID: 11400000, guid: 2275c1217035d4048a156bbd6d6c9c85, type: 2}

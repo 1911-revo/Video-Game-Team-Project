@@ -1,24 +1,44 @@
+using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// General state machine to control enemy behaviour
+/// </summary>
 public class EnemyStateController : MonoBehaviour
 {
-    public EnemyState initialState;
+    [Header("Configuration")]
+    [SerializeReference] public ScriptableObject attackSO;
+    [SerializeField] private EnemyState[] states;
+    public WaypointManager waypointManager;
+
+    private Dictionary<string, EnemyState> enemyStates;
     private EnemyState currentState;
     private Enemy enemy;
-
-    [SerializeReference] public ScriptableObject attackSO;
 
     public IAttackBehaviour attack { get; private set; }
 
     private void Awake()
     {
+        // Initialise controller
         enemy = GetComponent<Enemy>();
         attack = attackSO as IAttackBehaviour;
+        enemyStates = new Dictionary<string, EnemyState>();
+        foreach (var state in states)
+        {
+            if (state != null)
+            {
+                enemyStates.Add(state.name, state);
+            }
+        }
     }
 
     private void Start()
     {
-        TransitionTo(initialState);
+        // Use first state provided as initial state
+        if (states.Length > 0)
+        {
+            TransitionTo(states[0].name);
+        }
     }
 
     private void Update()
@@ -26,10 +46,23 @@ public class EnemyStateController : MonoBehaviour
         currentState?.Tick(enemy);
     }
 
-    public void TransitionTo(EnemyState newState)
+    /// <summary>
+    /// Attempt to transition to the provided state
+    /// </summary>
+    /// <param name="stateName"> New state </param>
+    public void TransitionTo(string stateName)
     {
-        currentState?.Exit(enemy);
-        currentState = newState;
-        currentState?.Enter(enemy);
+        // Check state exists
+        if (enemyStates.TryGetValue(stateName, out var newState))
+        {
+            // Make transition
+            currentState?.Exit(enemy);
+            currentState = newState;
+            currentState?.Enter(enemy);
+        }
+        else
+        {
+            Debug.Log($"State '{stateName}' not found.");
+        }
     }
 }
