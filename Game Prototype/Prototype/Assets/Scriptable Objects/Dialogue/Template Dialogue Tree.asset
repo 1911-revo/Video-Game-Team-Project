@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2816c3c62c1945bcc568a9e1cf4c2, type: 3}
+  m_Name: Template Dialogue Tree
+  m_EditorClassIdentifier: 
+  nodes:
+  - nodeID: test_1
+    text: '*SHAKE(Hopefully this works)'
+    choices:
+    - choiceText: It Doesn't
+      targetNodeID: no_work
+    - choiceText: It Does
+      targetNodeID: yes_work
+    nextNodeID: 
+    isConditional: 0
+    conditionType: hasSpokenBefore
+    trueNodeID: 
+    falseNodeID: 
+  - nodeID: no_work
+    text: '*#FF0000(This is so sad) :('
+    choices: []
+    nextNodeID: 
+    isConditional: 0
+    conditionType: hasSpokenBefore
+    trueNodeID: 
+    falseNodeID: 
+  - nodeID: yes_work
+    text: '*SHAKE(Yay it work)'
+    choices: []
+    nextNodeID: 
+    isConditional: 0
+    conditionType: hasSpokenBefore
+    trueNodeID: 
+    falseNodeID: 
+  - nodeID: start
+    text: Hello I am an NPC! *PLAY(Start)
+    choices: []
+    nextNodeID: test_1
+    isConditional: 0
+    conditionType: hasSpokenBefore
+    trueNodeID: 
+    falseNodeID: 
+  startNodeID: start
+  repeatStartNodeID: 
+  useRepeatDialogue: 0
+  audioClips:
+  - {fileID: 8300000, guid: 749fb03bc3a972548858008c5ffdb879, type: 3}
+  audioClipNames:
+  - Start
