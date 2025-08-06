@@ -16,20 +16,21 @@ public class WeaponController : MonoBehaviour
     private int currentWeapon = 0;
     private float lastFireTime = 0f;
 
-    // Recoil System
+    [Header("Cutscene Integration")]
+    [SerializeField] private CutsceneManager cutsceneManager;
+
     [Header("Recoil Settings")]
-    [SerializeField] private float recoilBuildRate = 15f; // How much recoil builds per shot
-    [SerializeField] private float recoilDecayRate = 500f; // How fast recoil decays
-    [SerializeField] private float maxRecoil = 100f; // Maximum recoil value
+    [SerializeField] private float recoilBuildRate = 15f;
+    [SerializeField] private float recoilDecayRate = 500f;
+    [SerializeField] private float maxRecoil = 100f;
 
     [Header("Visual Recoil")]
-    [SerializeField] private float visualKickStrength = 0.08f; // Visual kick per shot
-    [SerializeField] private float visualReturnSpeed = 12f; // Return to center speed
-    [SerializeField] private float maxVisualKickback = 0.25f; // Max visual displacement
-    [SerializeField] private float rotationKickStrength = 4f; // Rotation per shot
-    [SerializeField] private float maxRotationKick = 12f; // Max rotation
+    [SerializeField] private float visualKickStrength = 0.08f;
+    [SerializeField] private float visualReturnSpeed = 12f;
+    [SerializeField] private float maxVisualKickback = 0.25f;
+    [SerializeField] private float rotationKickStrength = 4f;
+    [SerializeField] private float maxRotationKick = 12f;
 
-    // Runtime recoil values
     private float currentRecoil = 0f;
     private Vector3 visualRecoilOffset = Vector3.zero;
     private float visualRecoilRotation = 0f;
@@ -46,11 +47,27 @@ public class WeaponController : MonoBehaviour
     void Start()
     {
         weaponSpriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (cutsceneManager == null)
+        {
+            cutsceneManager = FindObjectOfType<CutsceneManager>();
+            if (cutsceneManager == null)
+            {
+                Debug.LogWarning("CutsceneManager not found! Weapon will not be disabled during cutscenes.");
+            }
+        }
+
         Debug.Log("Equipped Weapon: " + weapons[0]);
     }
 
     void Update()
     {
+        if (IsCutscenePlaying())
+        {
+            isShooting = false;
+            return;
+        }
+
         // Position gun at player center
         transform.position = player.transform.position;
 
@@ -76,6 +93,11 @@ public class WeaponController : MonoBehaviour
 
         handleShootingInput();
         handleWeaponSwitch();
+    }
+
+    private bool IsCutscenePlaying()
+    {
+        return cutsceneManager != null && cutsceneManager.IsPlayingCutscene();
     }
 
     private void updateRecoil()
@@ -124,6 +146,12 @@ public class WeaponController : MonoBehaviour
 
     private void handleShootingInput()
     {
+        if (IsCutscenePlaying())
+        {
+            isShooting = false;
+            return;
+        }
+
         if (Input.GetMouseButton(0))
         {
             isShooting = true;
@@ -137,6 +165,11 @@ public class WeaponController : MonoBehaviour
 
     private void tryShooting()
     {
+        if (IsCutscenePlaying())
+        {
+            return;
+        }
+
         float fireRate = weapons[currentWeapon].fireRate;
         float fireInterval = 1f / fireRate;
 
@@ -149,6 +182,11 @@ public class WeaponController : MonoBehaviour
 
     private void Shoot()
     {
+        if (IsCutscenePlaying())
+        {
+            return;
+        }
+
         // Apply recoil
         applyRecoilKick();
 
@@ -183,6 +221,11 @@ public class WeaponController : MonoBehaviour
 
     private void handleWeaponSwitch()
     {
+        if (IsCutscenePlaying())
+        {
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             Debug.Log("Equipped Weapon: " + weapons[0]);
