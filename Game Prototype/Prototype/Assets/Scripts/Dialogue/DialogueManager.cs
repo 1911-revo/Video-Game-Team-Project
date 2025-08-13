@@ -11,7 +11,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Dialogue dialogueController;
     [SerializeField] private GameObject choicePanel;
     [SerializeField] private GameObject choiceButtonPrefab;
-    [SerializeField] private PlayerController playerController; // Add reference to PlayerController
+    [SerializeField] private PlayerController playerController;
 
     [Header("Optional")]
     [SerializeField] private float delayAfterTyping = 0.2f;
@@ -19,7 +19,10 @@ public class DialogueManager : MonoBehaviour
     private DialogueTree currentTree;
     private DialogueNode currentNode;
     private bool dialogueActive = false;
-    private NPCDialogue currentNPC; // Store reference to current NPC
+    private NPCDialogue currentNPC;
+
+    // Track last selected choice for branching cutscenes
+    private string lastSelectedNodeID = "";
 
     void Start()
     {
@@ -78,6 +81,71 @@ public class DialogueManager : MonoBehaviour
         currentTree = null;
         currentNode = null;
         currentNPC = null;
+        lastSelectedNodeID = "";
+    }
+
+    // Start dialogue from a specific node (for cutscenes)
+    public void StartDialogueFromNode(NPCDialogue npc, string nodeID)
+    {
+        if (npc == null || string.IsNullOrEmpty(nodeID))
+        {
+            Debug.LogError("Invalid parameters for StartDialogueFromNode");
+            return;
+        }
+
+        currentNPC = npc;
+
+        if (npc.UsesBranchingDialogue() && npc.GetDialogueTree() != null)
+        {
+            DisablePlayerMovement();
+
+            currentTree = npc.GetDialogueTree();
+            currentNode = currentTree.GetNodeByID(nodeID);
+
+            if (currentNode == null)
+            {
+                Debug.LogError($"Node '{nodeID}' not found in dialogue tree!");
+                return;
+            }
+
+            dialogueActive = true;
+            ShowCurrentNode();
+        }
+    }
+
+    // Start dialogue with just a DialogueTree (for cutscenes)
+    public void StartDialogueTree(DialogueTree tree, string startNodeID = "")
+    {
+        if (tree == null)
+        {
+            Debug.LogError("DialogueTree is null!");
+            return;
+        }
+
+        // Disable player movement
+        DisablePlayerMovement();
+
+        currentTree = tree;
+        currentNPC = null; // No NPC associated with this dialogue
+
+        // Get the appropriate start node
+        if (!string.IsNullOrEmpty(startNodeID))
+        {
+            currentNode = tree.GetNodeByID(startNodeID);
+        }
+        else
+        {
+            currentNode = tree.GetStartNode(false); // Always use first-time dialogue for cutscenes
+        }
+
+        if (currentNode == null)
+        {
+            Debug.LogError("Start node not found in dialogue tree!");
+            return;
+        }
+
+        dialogueActive = true;
+        ShowCurrentNode();
     }
 
     // Start a new dialogue with an NPC
@@ -183,7 +251,7 @@ public class DialogueManager : MonoBehaviour
         EndDialogue();
     }
 
-    // Display the current dialogue node
+    // Display the current dialogue node - FIXED VERSION
     private void ShowCurrentNode()
     {
         if (currentNode == null)
@@ -199,16 +267,18 @@ public class DialogueManager : MonoBehaviour
             sounds = currentTree.GetAudioDictionary();
         }
 
-        // Display the node text with sounds from the dialogue tree
-        dialogueController.StartDialogue(new string[] { currentNode.text }, sounds);
+        // FIXED: Use single line dialogue WITHOUT callback for individual nodes
+        // Only the final node should trigger the completion callback
+        dialogueController.StartDialogue(currentNode.text, null, sounds);
 
-        // When dialogue finishes typing, show the choices or wait for input
-        StartCoroutine(WaitForDialogueAndShowChoices());
+        // Handle node completion ourselves
+        StartCoroutine(HandleNodeCompletion());
     }
 
-    private IEnumerator WaitForDialogueAndShowChoices()
+    // Handle what happens after a node's text finishes displaying
+    private IEnumerator HandleNodeCompletion()
     {
-        // Wait until dialogue stops typing
+        // Wait until the current node finishes typing
         while (dialogueController.isTyping)
         {
             yield return null;
@@ -217,7 +287,7 @@ public class DialogueManager : MonoBehaviour
         // Wait a short moment
         yield return new WaitForSeconds(delayAfterTyping);
 
-        // Show choices or wait for input
+        // Show choices or continue to next node
         if (currentNode.choices != null && currentNode.choices.Count > 0)
         {
             // Show choice buttons
@@ -233,13 +303,23 @@ public class DialogueManager : MonoBehaviour
 
             // Player pressed Enter, move to next node
             currentNode = currentTree.GetNodeByID(currentNode.nextNodeID);
-            ShowCurrentNode();
+            if (currentNode != null)
+            {
+                ShowCurrentNode(); // Show the next node
+            }
+            else
+            {
+                // End the entire dialogue tree - THIS is when we signal completion
+                EndDialogue();
+            }
         }
         else
         {
-            // End of dialogue branch - wait for Enter
+            // End of dialogue branch - wait for Enter, then end the whole tree
             dialogueController.WaitForChoice(false);
             yield return StartCoroutine(WaitForEnterInput());
+
+            // THIS is when the entire dialogue tree is complete
             EndDialogue();
         }
     }
@@ -322,7 +402,7 @@ public class DialogueManager : MonoBehaviour
             }
         }
 
-        // Position the choice panel properly for a horizontal layout - Ideally I shouldn't be hardcoding this but I give up :sob:  
+        // Position the choice panel properly for a horizontal layout
         RectTransform choicePanelRect = choicePanel.GetComponent<RectTransform>();
         if (choicePanelRect != null)
         {
@@ -348,9 +428,19 @@ public class DialogueManager : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(choicePanelRect);
     }
 
-    // Handle choice selection
+    // Handle choice selection - UPDATED
     private void OnChoiceSelected(string targetNodeID)
     {
+        // Store the selected node ID for cutscene branching
+        lastSelectedNodeID = targetNodeID;
+
+        // Notify cutscene manager if it exists
+        CutsceneManager cutsceneManager = FindObjectOfType<CutsceneManager>();
+        if (cutsceneManager != null)
+        {
+            cutsceneManager.lastDialogueChoice = targetNodeID;
+        }
+
         // Hide the choice panel
         choicePanel.SetActive(false);
 
@@ -362,7 +452,7 @@ public class DialogueManager : MonoBehaviour
         if (nextNode != null)
         {
             currentNode = nextNode;
-            ShowCurrentNode();
+            ShowCurrentNode(); // This will properly display the next node
         }
         else
         {
@@ -371,14 +461,17 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    // End the dialogue
-    private void EndDialogue()
+    // End the dialogue - ONLY called when the entire tree is complete
+    public void EndDialogue()
     {
-        dialogueController.EndDialogue();
+        // IMPORTANT: Only signal completion when the ENTIRE dialogue tree is finished
+        dialogueController.EndDialogue(); // This will trigger the cutscene callback
+
         dialogueActive = false;
         currentTree = null;
         currentNode = null;
         currentNPC = null;
+        lastSelectedNodeID = "";
 
         // Hide choice panel if visible
         if (choicePanel != null)
@@ -448,5 +541,16 @@ public class DialogueManager : MonoBehaviour
         ContentSizeFitter sizeFitter = choicePanel.AddComponent<ContentSizeFitter>();
         sizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
         sizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+    }
+
+    public string GetLastSelectedNodeID()
+    {
+        return lastSelectedNodeID;
+    }
+
+    // Check if dialogue is currently active
+    public bool IsDialogueActive()
+    {
+        return dialogueActive;
     }
 }

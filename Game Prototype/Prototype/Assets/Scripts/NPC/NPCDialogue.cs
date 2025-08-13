@@ -3,38 +3,100 @@ using UnityEngine;
 
 public class NPCDialogue : MonoBehaviour
 {
-    // Not a great way of doing this, just tryna keep backwards compatability so I don't need to rewrite too much.
-    [SerializeField] public List<string> dialogue;
-    [SerializeField] public List<string> repeat;
+    [Header("Linear Dialogue System")]
+    public List<string> dialogue = new List<string>();
+    public List<string> repeat = new List<string>();
 
-    // Add new fields for branching dialogue
-    [SerializeField] private DialogueTree dialogueTree;
+    [Header("Branching Dialogue System")]
+    [SerializeField] public bool useDialogueTree = false;
+    [SerializeField] public DialogueTree dialogueTree;
 
+    // Track whether this NPC has been spoken to
     private bool hasSpokenBefore = false;
 
-    // Method to check if this NPC uses branching dialogue
+    // Check if this NPC uses branching dialogue
     public bool UsesBranchingDialogue()
     {
-        return dialogueTree != null;
+        return useDialogueTree && dialogueTree != null;
     }
 
+    // Get the dialogue tree
     public DialogueTree GetDialogueTree()
     {
         return dialogueTree;
     }
 
-    public string[] GetRepeatDialogue()
-    {
-        return repeat.ToArray();
-    }
-
+    // Check if we've spoken to this NPC before
     public bool HasSpokenBefore()
     {
         return hasSpokenBefore;
     }
 
+    // Mark that we've spoken to this NPC
     public void SetSpokenBefore()
     {
         hasSpokenBefore = true;
+    }
+
+    // Reset the spoken state (for cutscenes that shouldn't mark as spoken)
+    public void ResetSpokenState()
+    {
+        hasSpokenBefore = false;
+    }
+
+    // Get repeat dialogue as array
+    public string[] GetRepeatDialogue()
+    {
+        if (repeat != null && repeat.Count > 0)
+        {
+            return repeat.ToArray();
+        }
+        return new string[0];
+    }
+
+    // Get dialogue array without marking as spoken (for cutscenes)
+    public string[] GetDialogueArray()
+    {
+        if (HasSpokenBefore() && repeat != null && repeat.Count > 0)
+        {
+            return repeat.ToArray();
+        }
+        else if (dialogue != null && dialogue.Count > 0)
+        {
+            return dialogue.ToArray();
+        }
+        return new string[0];
+    }
+
+    // Get the current dialogue based on spoken state
+    public string[] GetCurrentDialogue()
+    {
+        if (UsesBranchingDialogue())
+        {
+            Debug.LogWarning("GetCurrentDialogue called on NPC with branching dialogue. Use DialogueManager instead.");
+            return new string[0];
+        }
+
+        return GetDialogueArray();
+    }
+
+    // Force set the spoken state (useful for save/load systems)
+    public void SetSpokenState(bool spoken)
+    {
+        hasSpokenBefore = spoken;
+    }
+
+    // Validate the dialogue setup
+    private void OnValidate()
+    {
+        if (useDialogueTree && dialogueTree == null)
+        {
+            Debug.LogWarning($"NPC '{gameObject.name}' has 'Use Dialogue Tree' enabled but no DialogueTree assigned!");
+        }
+
+        if (!useDialogueTree && (dialogue == null || dialogue.Count == 0))
+        {
+            Debug.LogWarning($"NPC '{gameObject.name}' has no dialogue lines set up!");
+        }
     }
 }
