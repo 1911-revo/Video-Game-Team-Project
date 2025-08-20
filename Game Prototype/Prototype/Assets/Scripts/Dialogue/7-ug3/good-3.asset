@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2816c3c62c1945bcc568a9e1cf4c2, type: 3}
+  m_Name: good-3
+  m_EditorClassIdentifier: 
+  nodes:
+  - nodeID: 0
+    text: Please help me! My family needs me!
+    choices:
+    - choiceText: Why are you here?
+      targetNodeID: 1
+    nextNodeID: 
+  - nodeID: 1
+    text: "It sounds stupid, but I got caught shoplifting. I stole some bread and
+      rice from the hypermarket and I didn\u2019t have any money to pay the fine."
+    choices:
+    - choiceText: "Okay, let\u2019s go!"
+      targetNodeID: yes
+    - choiceText: "Sorry, I can\u2019t let you out."
+      targetNodeID: no
+    - choiceText: Everyone else here was accused of something far more serious. What
+        did you really do?
+      targetNodeID: more
+    nextNodeID: 
+  - nodeID: more
+    text: "I really did steal bread and rice! But\u2026 I do have to admit I wasn\u2019t
+      exactly friendly when they tried to stop me. My kids were starving! I wasn\u2019t
+      going to let some two-bit mall cop stop me from feeding them\u2026"
+    choices:
+    - choiceText: "Okay, let\u2019s go!"
+      targetNodeID: yes
+    - choiceText: "Sorry, I can\u2019t let you out."
+      targetNodeID: no
+    nextNodeID: 
+  - nodeID: yes
+    text: 
+    choices: []
+    nextNodeID: 
+  - nodeID: no
+    text: 
+    choices: []
+    nextNodeID: 
+  startNodeID: 0
+  repeatStartNodeID: 
+  useRepeatDialogue: 0
+  audioClips: []
+  audioClipNames: []

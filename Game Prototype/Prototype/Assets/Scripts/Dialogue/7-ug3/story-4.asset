@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2816c3c62c1945bcc568a9e1cf4c2, type: 3}
+  m_Name: story-4
+  m_EditorClassIdentifier: 
+  nodes:
+  - nodeID: 0
+    text: "Oh thank God! Let me out! My name\u2019s Mist, you must be here to save
+      us?"
+    choices:
+    - choiceText: "Okay, let\u2019s go!"
+      targetNodeID: yes
+    - choiceText: "Sorry, I can\u2019t let you out."
+      targetNodeID: no
+    - choiceText: I might be. Who are you?
+      targetNodeID: more
+    nextNodeID: 
+  - nodeID: more
+    text: "I tried to do the same thing as you! I broke into a different prison a
+      month ago, but I didn\u2019t bring enough firepower and they caught me. It\u2019s
+      weird though. I thought there would be guards here, but I haven\u2019t seen
+      you fight any. Maybe they\u2019re all on lunch or something? Either way, let\u2019s
+      get out of here before it\u2019s too late!"
+    choices:
+    - choiceText: "Okay, let\u2019s go!"
+      targetNodeID: yes
+    - choiceText: "Sorry, I can\u2019t let you out."
+      targetNodeID: no
+    nextNodeID: 
+  - nodeID: yes
+    text: 
+    choices: []
+    nextNodeID: 
+  - nodeID: no
+    text: 
+    choices: []
+    nextNodeID: 
+  startNodeID: 0
+  repeatStartNodeID: 
+  useRepeatDialogue: 0
+  audioClips: []
+  audioClipNames: []

@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2816c3c62c1945bcc568a9e1cf4c2, type: 3}
+  m_Name: intro-1-arrive
+  m_EditorClassIdentifier: 
+  nodes:
+  - nodeID: intro_1
+    text: "Today we\u2019re finally raiding the home of some hippie radical, a guy
+      called Junwei. Here\u2019s the warrant: remember the face, we\u2019re bringing
+      him in dead or alive"
+    choices:
+    - choiceText: Take a look.
+      targetNodeID: doss_1
+    nextNodeID: doss_1
+  - nodeID: doss_1
+    text: 'Age: 36. Occupation: Unemployed. Charges: Slander, Anti-Social Behaviour,
+      Disturbing the Peace, Resisting Arrest. Danger: Low.'
+    choices: []
+    nextNodeID: doss_2
+  - nodeID: doss_2
+    text: "Description: Junwei is a despicable radical who has been engaging in dangerous
+      and unethical antisocial behaviours. He is known for frequent disruptive and
+      slanderous claims against the great corporations that underpin our society\u2019s
+      function. Recently, his falsified and outlandish claim that Electric Automotive
+      Co have been spilling pollution from their factory has begun to receive widespread
+      attention."
+    choices:
+    - choiceText: Capture him at all costs.
+      targetNodeID: intro_2
+    nextNodeID: 
+  - nodeID: intro_2
+    text: "I can\u2019t believe this. It was supposed to be our day off! Instead,
+      they\u2019re making us breach this damn guy\u2019s house, and apparently I\u2019m
+      first through the door too! What a joke, right buddy?"
+    choices: []
+    nextNodeID: 
+  startNodeID: intro_1
+  repeatStartNodeID: 
+  useRepeatDialogue: 0
+  audioClips: []
+  audioClipNames: []

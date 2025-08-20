@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2816c3c62c1945bcc568a9e1cf4c2, type: 3}
+  m_Name: 2-save-employee
+  m_EditorClassIdentifier: 
+  nodes:
+  - nodeID: 0
+    text: Wait wait wait what the hell you are doing???
+    choices: []
+    nextNodeID: 1
+  - nodeID: 1
+    text: ' I just ordered those lazy-ass robots cleaned the whole space and what
+      did you do...'
+    choices:
+    - choiceText: ...
+      targetNodeID: 2
+    nextNodeID: 
+  - nodeID: 2
+    text: ...
+    choices:
+    - choiceText: I guess you should leave right now...?
+      targetNodeID: save
+    - choiceText: Unlucky.
+      targetNodeID: kill
+    nextNodeID: 
+  - nodeID: save
+    text: 
+    choices: []
+    nextNodeID: 
+  - nodeID: kill
+    text: 
+    choices: []
+    nextNodeID: 
+  startNodeID: 
+  repeatStartNodeID: 
+  useRepeatDialogue: 0
+  audioClips: []
+  audioClipNames: []

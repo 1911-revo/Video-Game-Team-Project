@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2816c3c62c1945bcc568a9e1cf4c2, type: 3}
+  m_Name: story-1
+  m_EditorClassIdentifier: 
+  nodes:
+  - nodeID: 0
+    text: "J_! It\u2019s Mary, are you here to save us?"
+    choices:
+    - choiceText: "I\u2019m here to break out some revolution prisoners."
+      targetNodeID: 1
+    nextNodeID: 
+  - nodeID: 1
+    text: "Yeah, that\u2019s me! We\u2019re all wearing this uniform to mark us."
+    choices:
+    - choiceText: Should I be breaking out anyone else?
+      targetNodeID: 2
+    nextNodeID: 
+  - nodeID: 2
+    text: There are a few other people who probably deserve to be freed, but plenty
+      of people in here belong here. If you decide to let more people out, be careful!
+    choices:
+    - choiceText: "Okay, let\u2019s go!"
+      targetNodeID: yes
+    nextNodeID: 
+  - nodeID: yes
+    text: 
+    choices: []
+    nextNodeID: 
+  startNodeID: 0
+  repeatStartNodeID: 
+  useRepeatDialogue: 0
+  audioClips: []
+  audioClipNames: []

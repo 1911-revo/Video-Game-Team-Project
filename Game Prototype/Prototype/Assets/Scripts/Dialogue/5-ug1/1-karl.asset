@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2816c3c62c1945bcc568a9e1cf4c2, type: 3}
+  m_Name: 1-karl
+  m_EditorClassIdentifier: 
+  nodes:
+  - nodeID: 1
+    text: "You\u2019re in the wrong spot."
+    choices:
+    - choiceText: "Who\u2019s there? Get back, I\u2019m armed!  "
+      targetNodeID: 2
+    nextNodeID: 
+  - nodeID: 2
+    text: "Hey! Hey! Relax, J_. I\u2019m not here to get you."
+    choices: []
+    nextNodeID: 3
+  - nodeID: 3
+    text: I thought you were dead... It's really nice to see you again buddy...
+    choices: []
+    nextNodeID: 4
+  - nodeID: 4
+    text: 'You were only trying to do what you thought was right. I believe in that. '
+    choices: []
+    nextNodeID: 5
+  - nodeID: 5
+    text: 'The guy who took over your position is a psycho. I watched him beat a
+      man to death yesterday, and all he got was a slap on the wrist and a day off.
+      Paid.  '
+    choices: []
+    nextNodeID: 6
+  - nodeID: 5
+    text: 'The guy who took over your position is a psycho. I watched him beat a
+      man to death yesterday, and all he got was a slap on the wrist and a day off.
+      Paid.  '
+    choices: []
+    nextNodeID: 6
+  startNodeID: 
+  repeatStartNodeID: 
+  useRepeatDialogue: 0
+  audioClips: []
+  audioClipNames: []

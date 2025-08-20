@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2816c3c62c1945bcc568a9e1cf4c2, type: 3}
+  m_Name: karl
+  m_EditorClassIdentifier: 
+  nodes:
+  - nodeID: 0
+    text: "Thank god you\u2019re here! They got me today. Somehow they found out
+      I helped you on the roof and they\u2019re blaming me for Chief Johnson\u2019s
+      death. Nice work, by the way. "
+    choices:
+    - choiceText: Why are you here?
+      targetNodeID: 1
+    nextNodeID: 
+  - nodeID: 1
+    text: "I don\u2019t really know. I guess I\u2019m still alive because they didn\u2019t
+      want me to turn out like you. Ironic, isn\u2019t it?"
+    choices:
+    - choiceText: "Okay, let\u2019s go!"
+      targetNodeID: yes
+    - choiceText: "Sorry, I can\u2019t let you out."
+      targetNodeID: no
+    nextNodeID: 
+  - nodeID: yes
+    text: 
+    choices: []
+    nextNodeID: 
+  - nodeID: no
+    text: 
+    choices: []
+    nextNodeID: 
+  startNodeID: 0
+  repeatStartNodeID: 
+  useRepeatDialogue: 0
+  audioClips: []
+  audioClipNames: []

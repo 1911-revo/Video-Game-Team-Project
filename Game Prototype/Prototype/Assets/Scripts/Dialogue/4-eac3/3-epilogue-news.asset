@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2816c3c62c1945bcc568a9e1cf4c2, type: 3}
+  m_Name: 3-epilogue-news
+  m_EditorClassIdentifier: 
+  nodes:
+  - nodeID: 1
+    text: 'Subversive activity by a dangerous radical has resulted in minor damage
+      to a factory owned by the Electronic Automotive Corporation last night. '
+    choices: []
+    nextNodeID: 2
+  - nodeID: 2
+    text: A company spokesperson has reported that it will affect their production
+      capabilities, which may result in increased prices in the short term.
+    choices: []
+    nextNodeID: 3
+  - nodeID: 3
+    text: 'Also, they announced that an exciting new product from their research
+      department has been set back in development by the harmful actions caused by
+      the radicals.  '
+    choices: []
+    nextNodeID: 4
+  - nodeID: 4
+    text: There was only limited footage of the attack, which we will now show. Viewer
+      discretion is advised.
+    choices: []
+    nextNodeID: 
+  startNodeID: 1
+  repeatStartNodeID: 
+  useRepeatDialogue: 0
+  audioClips: []
+  audioClipNames: []
