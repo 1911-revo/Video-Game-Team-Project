@@ -20,6 +20,7 @@ public class CompletionScreen : MonoBehaviour
 
     private bool isTyping = false;
     bool loadNextScene = false;
+    bool gamesaved = false;
 
     /// <summary>
     /// Sets all UI elements to the required values.
@@ -31,6 +32,7 @@ public class CompletionScreen : MonoBehaviour
         timestamp.maxVisibleCharacters = 0;
 
         isTyping = true;
+        SaveProgress();
         StartCoroutine(TypeText(stats.time));
         StartCoroutine(PreloadScene("MissionSelect"));
     }
@@ -73,7 +75,7 @@ public class CompletionScreen : MonoBehaviour
             buttonText.text = "Loading videos: " + (asyncOperation.progress * 100) + "%";
 
             // Check if the load has finished
-            if (asyncOperation.progress >= 0.9f)
+            if (asyncOperation.progress >= 0.9f && gamesaved == true)
             {
                 //Change the Text to show the Level is ready
                 buttonText.text = "Return";
@@ -88,6 +90,12 @@ public class CompletionScreen : MonoBehaviour
             yield return null;
         }
 
+    }
+
+    public async void SaveProgress()
+    {
+        await SaveGame.Missions(stats);
+        gamesaved = true;
     }
 
 

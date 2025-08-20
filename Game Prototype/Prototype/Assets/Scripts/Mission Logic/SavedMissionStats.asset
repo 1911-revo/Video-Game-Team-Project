@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 221b39b4253fc1149bbf3b8d90e59ca8, type: 3}
   m_Name: SavedMissionStats
   m_EditorClassIdentifier: 
+  id: 
   time: 00:00:11:29
+  complete: 0

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
-using NUnit.Framework;
-using UnityEditor.Overlays;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public static class SaveGame
@@ -10,40 +9,34 @@ public static class SaveGame
 
     private class Wrapper
     {
-        public List<SavedMissionStats> savedStats = new List<SavedMissionStats>(); 
+        public List<SavedMissionData> savedStats = new List<SavedMissionData>();
     }
 
-    private static Wrapper LoadWrapper()
+    private static async Task<Wrapper> LoadWrapperAsync()
     {
         if (!File.Exists(savePath))
         {
             return new Wrapper();
         }
-
         string json = File.ReadAllText(savePath);
         return JsonUtility.FromJson<Wrapper>(json) ?? new Wrapper();
     }
 
-    public static void Save(SavedMissionStats stats)
+    public static async Task Missions(SavedMissionStats stats)
     {
-        Wrapper wrapper = LoadWrapper();
-
+        Wrapper wrapper = await LoadWrapperAsync();
         bool alreadyExists = wrapper.savedStats.Exists(x => x.id == stats.id);
         if (alreadyExists)
         {
-            Debug.Log($"Skipped saving {stats.name} as it already exists.");
+            Debug.Log($"Skipped saving {stats.id} as it already exists.");
             return;
         }
 
-        wrapper.savedStats.Add(new SavedMissionStats
-        {
-            id = stats.id,
-            time = stats.time,
-            complete = stats.complete
-        });
+        // Convert ScriptableObject to plain data class
+        wrapper.savedStats.Add(new SavedMissionData(stats));
 
-        string json = JsonUtility.ToJson(wrapper.savedStats);
+        string json = JsonUtility.ToJson(wrapper);
         File.WriteAllText(savePath, json);
-        Debug.Log($"Saved {stats.name} to {savePath}");
+        Debug.Log($"Saved {stats.id} to {savePath}");
     }
 }

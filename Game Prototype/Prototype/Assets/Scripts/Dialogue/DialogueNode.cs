@@ -10,6 +10,8 @@ public class DialogueNode
     [SerializeField] public List<DialogueChoice> choices;
     [SerializeField] public string nextNodeID; // Reference to the next node if there are no dialogue choices.
 
+    [SerializeField] public int valueWhenReached; // How to effect the ending score when this node is reached.
+
     [Serializable]
     public class DialogueChoice
     {

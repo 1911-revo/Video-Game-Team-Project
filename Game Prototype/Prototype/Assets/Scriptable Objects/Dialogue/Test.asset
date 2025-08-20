@@ -14,29 +14,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodes:
   - nodeID: test_1
-    text: '*SHAKE(Hopefully this works)'
+    text: '*SHAKE(Hopefully this works), aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
     choices:
     - choiceText: It Doesn't
       targetNodeID: no_work
     - choiceText: It Does
       targetNodeID: yes_work
     nextNodeID: 
+    valueWhenReached: 0
   - nodeID: no_work
     text: '*#FF0000(This is so sad) :('
     choices: []
     nextNodeID: 
+    valueWhenReached: 1
   - nodeID: yes_work
     text: '*SHAKE(Yay it work)'
     choices: []
     nextNodeID: 
+    valueWhenReached: -1
   - nodeID: start
     text: Hello I am an NPC! *PLAY(Start)
     choices: []
     nextNodeID: test_1
+    valueWhenReached: 0
   - nodeID: repeat
     text: Go away :((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
     choices: []
     nextNodeID: 
+    valueWhenReached: 0
   startNodeID: start
   repeatStartNodeID: repeat
   useRepeatDialogue: 1
