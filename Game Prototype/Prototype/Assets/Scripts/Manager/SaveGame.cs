@@ -32,7 +32,6 @@ public static class SaveGame
             return;
         }
 
-        // Convert ScriptableObject to plain data class
         wrapper.savedStats.Add(new SavedMissionData(stats));
 
         string json = JsonUtility.ToJson(wrapper);

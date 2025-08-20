@@ -1,21 +1,75 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 
 public class MissionLoader : MonoBehaviour
 {
     [SerializeField] private GameObject buttonPrefab;
     [SerializeField] private Transform scrollViewContent;
     [SerializeField] private MissionData missionData;
-
-    // Array of mission info (scene + display text)
     [SerializeField] private MissionData[] missions;
 
-    private void Start()
+    private List<SavedMissionData> completedMissions = new List<SavedMissionData>();
+
+    private async void Start()
     {
+        await LoadSaveData();
         PopulateScrollView();
     }
+
+    /// <summary>
+    /// Load the saved mission data
+    /// </summary>
+    private async Task LoadSaveData()
+    {
+        try
+        {
+            string savePath = Path.Combine(Application.persistentDataPath, "SAVE.SAV");
+            if (File.Exists(savePath))
+            {
+                string json = File.ReadAllText(savePath);
+                var wrapper = JsonUtility.FromJson<SaveWrapper>(json);
+                if (wrapper != null)
+                {
+                    completedMissions = wrapper.savedStats;
+                }
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"Error loading save data: {e.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Check if a mission is completed
+    /// </summary>
+    private bool IsMissionCompleted(string missionId)
+    {
+        return completedMissions.Exists(m => m.id == missionId && m.complete);
+    }
+
+    /// <summary>
+    /// Check if all prerequisites for a mission are met
+    /// </summary>
+    private bool ArePrerequisitesMet(MissionData mission)
+    {
+        if (mission.prerequisites == null || mission.prerequisites.Length == 0)
+            return true; // No prerequisites means it's always available
+
+        foreach (MissionData prerequisite in mission.prerequisites)
+        {
+            if (!IsMissionCompleted(prerequisite.missionId))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /// <summary>
     /// Adds the mission buttons to the scrollable view
     /// </summary>
@@ -23,32 +77,58 @@ public class MissionLoader : MonoBehaviour
     {
         foreach (MissionData mission in missions)
         {
-            // Instantiate button prefab
             GameObject buttonObj = Instantiate(buttonPrefab, scrollViewContent);
-
-            // Get the button component
             Button button = buttonObj.GetComponent<Button>();
-
-            // Set button text to mission text
             TMPro.TextMeshProUGUI buttonText = buttonObj.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            if (buttonText != null)
-                buttonText.text = mission.missionText;
 
-            // Add onClick event to load the scene
-            button.onClick.AddListener(() => LoadScene(mission.sceneName, mission.missionText, mission.lore, mission.sprite));
+            bool isCompleted = IsMissionCompleted(mission.missionId);
+            bool prerequisitesMet = ArePrerequisitesMet(mission);
+
+            // Set button text
+            if (buttonText != null)
+            {
+                if (isCompleted)
+                {
+                    buttonText.text = mission.missionText + " [COMPLETED]";
+                    buttonText.color = Color.green;
+                }
+                else if (!prerequisitesMet)
+                {
+                    buttonText.text = mission.missionText + " [LOCKED]";
+                    buttonText.color = Color.gray;
+                }
+                else
+                {
+                    buttonText.text = mission.missionText;
+                    buttonText.color = Color.white;
+                }
+            }
+
+            // Set button interactability
+            button.interactable = prerequisitesMet && !isCompleted;
+
+            // Only add click listener if mission is playable
+            if (prerequisitesMet && !isCompleted)
+            {
+                button.onClick.AddListener(() => LoadScene(mission.missionId, mission.sceneName, mission.missionText, mission.lore, mission.sprite));
+            }
         }
     }
 
-    //Loads the requested scene
-    public void LoadScene(string sceneName, string missionText, string missionLore, Sprite missionSprite)
+    public void LoadScene(string id, string sceneName, string missionText, string missionLore, Sprite missionSprite)
     {
-        Debug.Log("Loading mission lore screen");
         SceneManager.LoadScene("missionLore");
 
-        // Passes important info to the mission
+        PlayerPrefs.SetString("CurrentMissionId", id); // Really bodgy fix but we're running out of time and I dont have time to fix it :sob:
         missionData.sceneName = sceneName;
         missionData.missionText = missionText;
         missionData.sprite = missionSprite;
         missionData.lore = missionLore;
     }
+}
+
+[System.Serializable]
+public class SaveWrapper
+{
+    public List<SavedMissionData> savedStats = new List<SavedMissionData>();
 }

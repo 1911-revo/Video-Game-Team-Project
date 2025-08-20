@@ -94,6 +94,9 @@ public class CompletionScreen : MonoBehaviour
 
     public async void SaveProgress()
     {
+        stats.id = PlayerPrefs.GetString("CurrentMissionId");
+        stats.complete = true;
+
         await SaveGame.Missions(stats);
         gamesaved = true;
     }
