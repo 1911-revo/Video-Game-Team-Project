@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   missionId: TEST002
   sceneName: Mission 1
-  missionText: the start
+  missionText: Second mission
   lore: Text or something
   sprite: {fileID: 21300000, guid: 239d6bac7153783488e18c578c47ecee, type: 3}
   prerequisites:

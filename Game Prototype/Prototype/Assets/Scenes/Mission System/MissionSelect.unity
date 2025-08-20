@@ -321,10 +321,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.050561797
-    y: 0.049937576
-    width: 0.8988764
-    height: 0.89887637
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -1367,7 +1367,7 @@ MonoBehaviour:
   missionData: {fileID: 11400000, guid: db503eea18023d24a863c78d2a494114, type: 2}
   missions:
   - {fileID: 11400000, guid: c9d1d678d50260d42bbc9185d42b3be0, type: 2}
-  - {fileID: 11400000, guid: c9d1d678d50260d42bbc9185d42b3be0, type: 2}
+  - {fileID: 11400000, guid: 4ef7815bb57086244867f18d8b221efa, type: 2}
 --- !u!4 &1985102695
 Transform:
   m_ObjectHideFlags: 0
