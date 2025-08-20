@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class updateMissionStats : MonoBehaviour
 {
@@ -7,6 +8,11 @@ public class updateMissionStats : MonoBehaviour
     [SerializeField] public SavedMissionStats stats;
 
     float timer = 0f;
+
+    private void Start()
+    {
+        stats.id = SceneManager.GetActiveScene().name;
+    }
 
     /// <summary>
     /// Keeps track of time spent in level

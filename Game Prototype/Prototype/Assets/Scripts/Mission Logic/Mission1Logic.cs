@@ -13,6 +13,11 @@ public class Mission1Logic : MonoBehaviour
 
     [SerializeField] public string key;
 
+    private void Start()
+    {
+        DialogueManager.ResetMissionDialogueScore();
+    }
+
     public void LeaveLevel()
     {
         if (inventorySystem.collectedItems.Any(item => item.id == key)){

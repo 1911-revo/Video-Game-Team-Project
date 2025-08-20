@@ -12,6 +12,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private GameObject choicePanel;
     [SerializeField] private GameObject choiceButtonPrefab;
     [SerializeField] private PlayerController playerController;
+    [SerializeField] private SavedMissionStats missionStats;
 
     [Header("Optional")]
     [SerializeField] private float delayAfterTyping = 0.2f;
@@ -23,6 +24,9 @@ public class DialogueManager : MonoBehaviour
 
     // Track last selected choice for branching cutscenes
     private string lastSelectedNodeID = "";
+
+    // Static dialogue score tracking for the current mission
+    public static int CurrentMissionDialogueScore { get; private set; } = 0;
 
     void Start()
     {
@@ -82,6 +86,19 @@ public class DialogueManager : MonoBehaviour
         currentNode = null;
         currentNPC = null;
         lastSelectedNodeID = "";
+    }
+
+    // Static methods to manage dialogue score
+    public static void ResetMissionDialogueScore()
+    {
+        CurrentMissionDialogueScore = 0;
+        Debug.Log("Mission dialogue score reset to 0");
+    }
+
+    public static void AddToDialogueScore(int value)
+    {
+        CurrentMissionDialogueScore += value;
+        Debug.Log($"Added {value} to dialogue score. Total: {CurrentMissionDialogueScore}");
     }
 
     // Start dialogue from a specific node (for cutscenes)
@@ -251,13 +268,19 @@ public class DialogueManager : MonoBehaviour
         EndDialogue();
     }
 
-    // Display the current dialogue node - FIXED VERSION
+    // Display the current dialogue node - UPDATED TO ADD SCORE
     private void ShowCurrentNode()
     {
         if (currentNode == null)
         {
             Debug.LogError("Current node is null!");
             return;
+        }
+
+        // ADD THE NODE'S VALUE TO THE DIALOGUE SCORE WHEN REACHED
+        if (currentNode.valueWhenReached != 0)
+        {
+            AddToDialogueScore(currentNode.valueWhenReached);
         }
 
         // Get the sound dictionary from the current tree
