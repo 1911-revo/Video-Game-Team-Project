@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2816c3c62c1945bcc568a9e1cf4c2, type: 3}
+  m_Name: 1-cyber-brain
+  m_EditorClassIdentifier: 
+  nodes:
+  - nodeID: 0
+    text: 'Shopping records, release plans for new products, someone''s love letter...  '
+    choices: []
+    nextNodeID: 1
+  - nodeID: 1
+    text: 'Nothing special... wait...?  '
+    choices: []
+    nextNodeID: 2
+  - nodeID: 2
+    text: 'Some of the records aren''t sent to Jeson Pharmaceuticals'' company server,
+      but rather a strange IP which doesn''t appear on the network, nor in information
+      collected by R-force in past missions.  '
+    choices:
+    - choiceText: 10 minutes later...
+      targetNodeID: 3
+    nextNodeID: 
+  - nodeID: 3
+    text: Only junk mails and a bunch of personal stuff... Maybe it's not a laboratory
+      but more like a private hospital for Jesons' managers and stakeholders...???
+      Sure, there are records of some human experiments but they do it everywhere.
+      No one should feel suprised about that...
+    choices: []
+    nextNodeID: 4
+  - nodeID: 4
+    text: 'Some of these people looks quite familiar...  '
+    choices: []
+    nextNodeID: 5
+  - nodeID: 5
+    text: 'Wait, these four are criminals captured by Chief Johnson last month. I
+      thought they should be excuted or sent to jail at least. But why the hell they
+      are sent to Jeson''s private hospital? Also the doctor on record is...  '
+    choices: []
+    nextNodeID: 6
+  - nodeID: 6
+    text: Mr. Jeson himself!
+    choices: []
+    nextNodeID: 7
+  - nodeID: 7
+    text: And the medicine used for the whole 'treatment' is called 'Serum v2'...
+    choices: []
+    nextNodeID: 7
+  startNodeID: 
+  repeatStartNodeID: 
+  useRepeatDialogue: 0
+  audioClips: []
+  audioClipNames: []

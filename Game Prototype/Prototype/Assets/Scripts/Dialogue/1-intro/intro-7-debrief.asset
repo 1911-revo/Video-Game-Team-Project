@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2816c3c62c1945bcc568a9e1cf4c2, type: 3}
+  m_Name: intro-7-debrief
+  m_EditorClassIdentifier: 
+  nodes:
+  - nodeID: johnson
+    text: "Well done boys, another filthy radical taken down. I\u2019d like to give
+      you all credit for such a successfully executed mission, and a special mention
+      to Officer J_ who took the final shot and really proved his worth. Well done
+      son. You\u2019re all dismissed."
+    choices:
+    - choiceText: Chief, can I show you something?
+      targetNodeID: great
+    nextNodeID: great
+  - nodeID: great
+    text: "Well, isn\u2019t that odd? This is a great find, son. The Department of
+      Corruption will want to see this! If you give it to me, I\u2019ll fax it to
+      them straight away!"
+    choices:
+    - choiceText: All yours, Chief.
+      targetNodeID: shred
+    nextNodeID: shred
+  - nodeID: shred
+    text: 'He puts the document into a slot in his desk. It whirs for a moment, and
+      the document disappears.  '
+    choices:
+    - choiceText: You think to yourself that the fax machine sounds a lot like the
+        shredder.
+      targetNodeID: thanks
+    nextNodeID: thanks
+  - nodeID: thanks
+    text: "Thanks, son, great work today. In fact, as a reward, I\u2019d like to
+      make you an offer. There\u2019s a spot as a lieutenant here, where you can
+      serve as my personal assistant. Or, if you\u2019re game for something more
+      adventurous, I\u2019ve heard there\u2019s an opening in the special forces
+      branch for someone with your talents. Either choice is a promotion with increased
+      responsibility and pay, but if you shine in the face of danger there could
+      be big things for you in the future of this organisation. What\u2019ll it be?"
+    choices:
+    - choiceText: "I\u2019ll stay here."
+      targetNodeID: stay
+    - choiceText: "I\u2019ll stay here."
+      targetNodeID: go
+    nextNodeID: thanks
+  - nodeID: stay
+    text: "Glad to hear it, I would have hated to lose you here. I\u2019ll see you
+      here next week with your new uniform."
+    choices: []
+    nextNodeID: onemore
+  - nodeID: go
+    text: "Alright, congratulations son! Report to the headquarters next week for
+      your new assignment. It\u2019s been an honour."
+    choices: []
+    nextNodeID: onemore
+  - nodeID: onemore
+    text: "Oh \u2014 and one more thing. This document is now the subject of an active
+      investigation, so you\u2019re absolutely not to tell anyone about it, under
+      any circumstances. Now go home and get some well-deserved rest.  "
+    choices:
+    - choiceText: "There\u2019s a strange look on his face as you leave the room,
+        but you can\u2019t quite pick what it is."
+      targetNodeID: 
+    nextNodeID: 
+  startNodeID: johnson
+  repeatStartNodeID: 
+  useRepeatDialogue: 0
+  audioClips: []
+  audioClipNames: []

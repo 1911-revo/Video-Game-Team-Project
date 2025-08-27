@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2816c3c62c1945bcc568a9e1cf4c2, type: 3}
+  m_Name: intro-4-karl-shot
+  m_EditorClassIdentifier: 
+  nodes:
+  - nodeID: karl
+    text: "Partner! I\u2019m hit bad. I\u2019ll live, but I can\u2019t breach the
+      house. You\u2019re gonna have to go in first. I\u2019ve trained you well. Go
+      get that bastard."
+    choices:
+    - choiceText: Breach the house.
+      targetNodeID: 
+    nextNodeID: 
+  startNodeID: 
+  repeatStartNodeID: 
+  useRepeatDialogue: 0
+  audioClips: []
+  audioClipNames: []
