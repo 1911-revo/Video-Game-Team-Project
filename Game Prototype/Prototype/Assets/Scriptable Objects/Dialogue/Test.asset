@@ -19,7 +19,7 @@ MonoBehaviour:
     - choiceText: It Doesn't
       targetNodeID: no_work
     - choiceText: It Does
-      targetNodeID: yes_work
+      targetNodeID: 
     nextNodeID: 
     valueWhenReached: 0
   - nodeID: no_work
