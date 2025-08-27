@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2816c3c62c1945bcc568a9e1cf4c2, type: 3}
+  m_Name: 1-meet-jensen
+  m_EditorClassIdentifier: 
+  nodes:
+  - nodeID: 0
+    text: 
+    choices:
+    - choiceText: '!'
+      targetNodeID: 1
+    nextNodeID: 
+    valueWhenReached: 0
+  - nodeID: 1
+    text: Here you are.
+    choices: []
+    nextNodeID: 2
+    valueWhenReached: 0
+  - nodeID: 2
+    text: I guess you have known me for a long time, but this is the first time we
+      meet like this.
+    choices:
+    - choiceText: Maybe killing you at this point won't change anything, but at least
+        one of you sick oligarchs will pay for your sins.
+      targetNodeID: 3
+    nextNodeID: 
+    valueWhenReached: 0
+  - nodeID: 3
+    text: 'Nice conclusion. I''m pretty suprised that you are an ''intelligent''
+      one.  '
+    choices:
+    - choiceText: '''Intelligent''? That sounds like you want to treat me like an
+        experiment animal!  '
+      targetNodeID: 4
+    nextNodeID: 
+    valueWhenReached: 0
+  - nodeID: 4
+    text: Oh, I guess I need to apologise and clarify a little bit... It's just my
+      personal habits with talking with others. You see all of us are involved in
+      this big experiment - the experiment called evolution. And I'm just interested
+      in accelerating it as much as I can since I'm really curious about the destination
+      of it.
+    choices: []
+    nextNodeID: 5
+    valueWhenReached: 0
+  - nodeID: 5
+    text: And J_ my friend, you are someone really special... Also your little friend
+      Karl... Thinking about the meaning of existance is a symbol of self-awareness
+      and self-awareness is the first step for improving yourself in any directions.
+      In other words, it makes you become 'better', biologically or mentally.
+    choices:
+    - choiceText: And?
+      targetNodeID: 6
+    nextNodeID: 
+    valueWhenReached: 0
+  - nodeID: 6
+    text: 'You and you little friend are attracting my attention. Your guys are young
+      but matural, naive but smart. Those features are not belong to creatures such
+      like Chief Johnson - something seeks virtual power and physical strength with
+      no awareness of limitation.  '
+    choices:
+    - choiceText: You mean me and Karl and all the events are just part of your 'evolution'
+        experiment? You are the one who brings the world with pain just for entertainment?
+      targetNodeID: 7
+    nextNodeID: 
+    valueWhenReached: 0
+  - nodeID: 7
+    text: 'Bwoah... Not really dear, not really. You will find the truth sooner or
+      later. But before that, please assist my tests a little bit, would you? '
+    choices:
+    - choiceText: Fuck you!
+      targetNodeID: 8
+    nextNodeID: 
+    valueWhenReached: 0
+  - nodeID: 8
+    text: 'As you wish man, as you wish.  '
+    choices: []
+    nextNodeID: 
+    valueWhenReached: 0
+  startNodeID: 0
+  repeatStartNodeID: 
+  useRepeatDialogue: 0
+  audioClips: []
+  audioClipNames: []

@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2816c3c62c1945bcc568a9e1cf4c2, type: 3}
+  m_Name: 1-sleepy-researcher
+  m_EditorClassIdentifier: 
+  nodes:
+  - nodeID: 0
+    text: Good morning sirr...
+    choices: []
+    nextNodeID: 1
+    valueWhenReached: 0
+  - nodeID: 1
+    text: You looks... not happy...
+    choices: []
+    nextNodeID: 2
+    valueWhenReached: 0
+  - nodeID: 2
+    text: I'm just wondering how much you had to drink last night?
+    choices: []
+    nextNodeID: 3
+    valueWhenReached: 0
+  - nodeID: 3
+    text: Drink? Nah... I'm not interested in alcohol...
+    choices: []
+    nextNodeID: 4
+    valueWhenReached: 0
+  - nodeID: 4
+    text: '*he pulls out a syringe* Much stronger stuff around here....'
+    choices:
+    - choiceText: <Let him sleep>
+      targetNodeID: sleep
+    - choiceText: <Stab him with the syringe>
+      targetNodeID: stab
+    nextNodeID: 
+    valueWhenReached: 0
+  - nodeID: sleep
+    text: Get some sleep, man. Better than stabbing yourself into a sponge.
+    choices: []
+    nextNodeID: sleep-1
+    valueWhenReached: 0
+  - nodeID: sleep-1
+    text: Oh gosh that's warm. My team lead usually suggests I commit suicide.
+    choices: []
+    nextNodeID: sleep-2
+    valueWhenReached: 0
+  - nodeID: sleep-2
+    text: "Well then, goodnight sir. By the way, both paths lead to an experiment
+      field. I don\u2019t know what's going on there but the left sector is full
+      of experiment animals while right sector is testing fungus or something like
+      that..."
+    choices: []
+    nextNodeID: sleep-3
+    valueWhenReached: 0
+  - nodeID: sleep-3
+    text: He collapses in a heap, right where he was standing.
+    choices: []
+    nextNodeID: 
+    valueWhenReached: 0
+  - nodeID: stab
+    text: '*You take the syringe and stab it into his shoulder.*'
+    choices: []
+    nextNodeID: stab-1
+    valueWhenReached: 0
+  - nodeID: stab-1
+    text: Oh that's... that's not bad actually... what are you doing here?
+    choices: []
+    nextNodeID: stab-2
+    valueWhenReached: 0
+  - nodeID: stab-2
+    text: It's obvious he's out of his mind. (TBC)
+    choices: []
+    nextNodeID: 
+    valueWhenReached: 0
+  startNodeID: 0
+  repeatStartNodeID: 
+  useRepeatDialogue: 0
+  audioClips: []
+  audioClipNames: []
