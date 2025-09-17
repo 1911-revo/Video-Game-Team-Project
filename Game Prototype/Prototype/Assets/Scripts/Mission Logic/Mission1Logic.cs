@@ -13,6 +13,8 @@ public class Mission1Logic : MonoBehaviour
 
     [SerializeField] public string key;
 
+    [SerializeField] public AudioSource[] audioSource;
+
     private void Start()
     {
         DialogueManager.ResetMissionDialogueScore();
@@ -27,6 +29,15 @@ public class Mission1Logic : MonoBehaviour
         else
         {
             Debug.Log("Player doesn't have key, and cannot leave level");
+        }
+    }
+
+    public void ChangeMusic()
+    {
+        if (audioSource[0].isPlaying)
+        {
+            audioSource[0].Stop();
+            audioSource[1].Play();
         }
     }
 }
