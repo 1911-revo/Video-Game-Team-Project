@@ -105,7 +105,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 256
+        width: 64
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -121,11 +121,77 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Karl_sprite-Sheet_prison_default_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c949abdc4f260a74594cb8c1a2330db1
+      internalID: 541074275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Karl_sprite-Sheet_prison_default_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9babe92395f8cfc40a1859f46ffcf999
+      internalID: 1434632394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Karl_sprite-Sheet_prison_default_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40ce58066a0e4ba4fa55139f797f66f5
+      internalID: -1758146282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 7137c2eec855f2a4cb37373be9dcc9c9
     internalID: 0
     vertices: []
     indices: 
@@ -136,6 +202,9 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       Karl_sprite-Sheet_prison_default_0: 7408864433322298801
+      Karl_sprite-Sheet_prison_default_1: 541074275
+      Karl_sprite-Sheet_prison_default_2: 1434632394
+      Karl_sprite-Sheet_prison_default_3: -1758146282
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

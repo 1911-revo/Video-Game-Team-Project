@@ -105,7 +105,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 256
+        width: 64
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -121,11 +121,77 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: J_sprite-Sheet_negative_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81bcc6a5285e7534e90e94dff2318e38
+      internalID: 1529476563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: J_sprite-Sheet_negative_2
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca9fac8d1d22e74458e9ad73b52957ab
+      internalID: 1499342663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: J_sprite-Sheet_negative_3
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4903efe850dffcc40a8838db08c59e68
+      internalID: 124868809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: ad1f80dbc027e194480a86de47535490
     internalID: 0
     vertices: []
     indices: 
@@ -136,6 +202,9 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       J_sprite-Sheet_negative_0: 1400007535619536988
+      J_sprite-Sheet_negative_1: 1529476563
+      J_sprite-Sheet_negative_2: 1499342663
+      J_sprite-Sheet_negative_3: 124868809
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
