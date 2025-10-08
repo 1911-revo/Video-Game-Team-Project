@@ -91,7 +91,7 @@ public class CameraController : MonoBehaviour
         float clampedX = Mathf.Clamp(targetPosition.x, minBounds.x + camWidth, maxBounds.x - camWidth);
         float clampedY = Mathf.Clamp(targetPosition.y, minBounds.y + camHeight, maxBounds.y - camHeight);
 
-        targetPosition = new Vector3(clampedX, clampedY, targetPosition.z);
+        //targetPosition = new Vector3(clampedX, clampedY, targetPosition.z);
 
         // Smoothly move camera to target position
         transform.position = Vector3.Lerp(transform.position, targetPosition, followSpeed * Time.deltaTime);
