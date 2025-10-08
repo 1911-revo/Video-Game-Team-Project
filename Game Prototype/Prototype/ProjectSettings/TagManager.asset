@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Collectable
+  - NPC
   layers:
   - Default
   - TransparentFX
