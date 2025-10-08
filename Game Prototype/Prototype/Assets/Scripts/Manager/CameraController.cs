@@ -20,6 +20,12 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float cursorSmoothSpeed = 3f;
 
 
+    //New added variables for camera bounds
+    [SerializeField] private SpriteRenderer mapRenderer;
+
+    private Vector2 minBounds;
+    private Vector2 maxBounds;
+
     // Variables for calculating where the camera should be looking
     private Camera mainCamera;
     private Vector2 currentCursorOffset;
@@ -38,9 +44,17 @@ public class CameraController : MonoBehaviour
             enabled = false;
             return;
         }
-    
 
-     if (playerTransform == null)
+
+        if (mapRenderer != null)
+        {
+            Bounds b = mapRenderer.bounds;
+            minBounds = b.min;
+            maxBounds = b.max;
+        }
+
+
+        if (playerTransform == null)
         {
             Debug.LogError("Player Transform not assigned to CameraController!");
             playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
@@ -69,6 +83,15 @@ public class CameraController : MonoBehaviour
             playerTransform.position.y + currentCursorOffset.y,
             transform.position.z  // Maintain camera z-position
         );
+
+        // Clamp camera position within bounds
+        float camHeight = mainCamera.orthographicSize;
+        float camWidth = camHeight * mainCamera.aspect;
+
+        float clampedX = Mathf.Clamp(targetPosition.x, minBounds.x + camWidth, maxBounds.x - camWidth);
+        float clampedY = Mathf.Clamp(targetPosition.y, minBounds.y + camHeight, maxBounds.y - camHeight);
+
+        targetPosition = new Vector3(clampedX, clampedY, targetPosition.z);
 
         // Smoothly move camera to target position
         transform.position = Vector3.Lerp(transform.position, targetPosition, followSpeed * Time.deltaTime);
