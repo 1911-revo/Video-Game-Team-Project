@@ -1,9 +1,11 @@
 # About this project
-For course comp4500/comp3500
+This is our game project for COMP3500/COMP4500
 
 # Installation 
 
+
 # How to run
+After installation, run the application for MacOS or exe file for Windows.
 
 # Contribution Guidelines
 
