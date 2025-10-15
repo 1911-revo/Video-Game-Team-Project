@@ -1,6 +1,6 @@
 # About this project
-This is our game project for COMP3500/COMP4500
-
+This is our game project for COMP3500/COMP4500. It features a top down pixel shooter set in a dystopian "big brother" type future.
+"
 # Installation 
 Download the exe and application and run it.
 
