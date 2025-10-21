@@ -10,6 +10,9 @@ After installation, run the application for MacOS or exe file for Windows.
 # Contribution Guidelines
 Fork project and submit a pull request.
 
+# Art Resources
+Link in Wiki 
+
 # License
 MIT License
 
