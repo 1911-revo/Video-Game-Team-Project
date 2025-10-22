@@ -2,16 +2,40 @@
 This is our game project for COMP3500/COMP4500. It features a top down pixel shooter set in a dystopian "big brother" type future.
 "
 # Installation 
-Download the exe and application and run it.
+Download the zip file and extract it, run the game application.
 
 # How to run
-After installation, run the application for MacOS or exe file for Windows.
+After installation, run the application.
+Requires windows 10 or later.
 
 # Contribution Guidelines
-Fork project and submit a pull request.
+## How to Contribute
+1. **Fork** the repository
+2. **Create a branch** for your feature (`git checkout -b feature/your-feature`)
+3. **Commit** your changes with clear messages
+4. **Test** your changes to ensure the game still runs
+5. **Submit a pull request** with a description of what you've added/fixed
+
+## What to Contribute
+- Bug fixes
+- New features or mechanics
+- Art assets (see Art Resources in Wiki)
+- Documentation improvements
+- Performance optimizations
+
+## Code Standards
+- Keep code readable and commented
+- Test on Windows 10+ before submitting
+- Don't commit build artifacts or temporary files
+
+## Reporting Issues
+Open an issue on GitHub with:
+- Clear description of the problem
+- Steps to reproduce
+- Expected vs actual behavior
 
 # Art Resources
-Link in Wiki 
+Link in Wiki, if you add additional art please try and keep a similar style.
 
 # License
 MIT License
