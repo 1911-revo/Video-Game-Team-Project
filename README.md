@@ -38,9 +38,15 @@ Link in Wiki, if you add additional art please try and keep a similar style.
 
 # Credits
 Junwei Bai - Art Team
+
 Harrison Black - Coding Team
+
 Henry Cotton - Coding + Art Team
+
 Toby Kitchen - Art Team
+
 Matthew Reynolds - Coding Team
+
 Qiuyang Shen - Art Team
+
 Yue Zhu - Coding Team
