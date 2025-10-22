@@ -12,6 +12,7 @@
 - Art assets (see Art Resources in Wiki)
 - Documentation improvements
 - Performance optimizations
+- **Any issues labelled "NOT PLANNED"** are the next features that we identified as neededing to be implimented, fell free to work on these!
 
 ## Code Standards
 - Keep code readable and commented
